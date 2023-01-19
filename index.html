@@ -112,23 +112,32 @@
 						<article class="col-1-medium work-item">
 							<h3>Fantasia con amore <sup>Original (2020)</sup></h3>
 							<p>A fantasia that conveys my love of nature and wish for a brighter future, to hearten those whose lives were impacted by COVID-19.</p>
-							<audio controls name="media" src="/audio/01.mp3" type="audio/mp3" style="width: 100%; margin: 1em 0 0 0;"></audio>
+							<audio controls src="./audio/00.mp3" type="audio/mpeg" style="width: 100%; margin: 1em 0 0 0;"></audio>
 						</article>
 						<article class="col-1-medium work-item">
 							<h3>Untitled Pop Piano Music <sup>Original (2021)</sup></h3>
 							<p>An impromptu composition, reflection of my inner self of tranquility, with gloom and hope, and with darkness and love.</p>
-							<audio controls name="media" src="/audio/02.mp3" type="audio/mp3" style="width: 100%; margin: 1em 0 0 0;"></audio>
+							<audio controls src="./audio/01.mp3" type="audio/mpeg" style="width: 100%; margin: 1em 0 0 0;"></audio>
 						</article>
 						<article class="col-1-medium work-item">
 							<h3>Allegro in A <sup>Original (2022)</sup></h3>
 							<p>A piano sonata movement.</p>
-							<audio controls name="media" src="/audio/03.mp3" type="audio/mp3" style="width: 100%; margin: 1em 0 0 0;"></audio>
+							<audio controls src="./audio/02.mp3" type="audio/mpeg" style="width: 100%; margin: 1em 0 0 0;"></audio>
 						</article>
 						<article class="col-1-medium work-item">
 							<h3>Symphony Theme Fragment <sup>Original (2023)</sup></h3>
 							<p>An Excerpt from A piece of orchestral music.</p>
-							<audio controls name="media" src="/audio/04.mp3" type="audio/mp3" style="width: 100%; margin: 1em 0 0 0;"></audio>
+							<audio controls src="./audio/03.mp3" type="audio/mpeg" style="width: 100%; margin: 1em 0 0 0;"></audio>
 						</article>
+						<script>
+							window.onload=function(){
+								var a = document.getElementsByTagName("audio");
+								a[0].onplay=function(){a[1].pause(); a[2].pause(); a[3].pause()}
+								a[1].onplay=function(){a[0].pause(); a[2].pause(); a[3].pause()}
+								a[2].onplay=function(){a[1].pause(); a[0].pause(); a[3].pause()}
+								a[3].onplay=function(){a[1].pause(); a[2].pause(); a[0].pause()}
+							}
+						</script>
 				</section>
 
 				<!-- Four -->
