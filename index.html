@@ -132,10 +132,11 @@
 						<script>
 							window.onload=function(){
 								var a = document.getElementsByTagName("audio");
-								a[0].onplay=function(){a[1].pause(); a[2].pause(); a[3].pause()}
-								a[1].onplay=function(){a[0].pause(); a[2].pause(); a[3].pause()}
-								a[2].onplay=function(){a[1].pause(); a[0].pause(); a[3].pause()}
-								a[3].onplay=function(){a[1].pause(); a[2].pause(); a[0].pause()}
+								a[0].volume=0.8; a[1].volume=0.8; a[2].volume=0.8, a[3].volume=0.8;
+								a[0].onplay=function(){a[1].pause(); a[2].pause(); a[3].pause();}
+								a[1].onplay=function(){a[0].pause(); a[2].pause(); a[3].pause();}
+								a[2].onplay=function(){a[1].pause(); a[0].pause(); a[3].pause();}
+								a[3].onplay=function(){a[1].pause(); a[2].pause(); a[0].pause();}
 							}
 						</script>
 				</section>
