@@ -190,6 +190,12 @@ main {
     color: #666;
 }
 
+@media (max-width: 768px) {
+    .module {
+        padding: 20px;
+    }
+}
+
 /* Skills Grid Section */
 .skills-grid {
     display: flex;
@@ -324,7 +330,7 @@ html[lang="zh"] .about-section {
 }
 
 /* Responsive adjustments */
-@media (max-width: 650px) {
+@media (max-width: 768px) {
     .about-content {
         flex-direction: column;
     }
