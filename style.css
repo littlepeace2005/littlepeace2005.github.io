@@ -254,13 +254,6 @@ main {
     gap: 15px; /* Reduced gap between title and content */
 }
 
-html[lang="zh"] .about-section {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    margin-bottom: 20px;
-}
-
 .about-content {
     display: flex;
     gap: 15px;
