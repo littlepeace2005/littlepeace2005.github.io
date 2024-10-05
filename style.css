@@ -192,7 +192,10 @@ main {
 
 @media (max-width: 768px) {
     .module {
-        padding: 20px;
+        padding: 25px;
+    }
+    .module-left {
+        flex: 0 0 60px;
     }
 }
 
