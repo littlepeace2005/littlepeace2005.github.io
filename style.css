@@ -241,10 +241,6 @@ main {
     .info-text h1 {
         font-size: 20px;
     }
-
-    .module-right h3 {
-        font-size: 18px;
-    }
 }
 
 /* About Section */
@@ -258,12 +254,13 @@ main {
     display: flex;
     gap: 15px;
     align-items: flex-start;
+    flex-direction: column;
 }
 
 .about-left {
-    flex: 0 0 250px; /* Slightly narrower width */
-    display: flex;
+    flex: 0 0 auto; /* Slightly narrower width */
     flex-direction: column;
+    display: flex;
     gap: 8px;
 }
 
@@ -288,14 +285,6 @@ main {
     font-size: 15px;
     color: #666;
     line-height: 1.5;
-}
-
-.hidden_a {
-    display: none;
-}
-
-.hidden_b {
-    display: inline;
 }
 
 /* Contact Section Adjustments */
@@ -325,6 +314,14 @@ main {
     text-decoration: underline;
 }
 
+.hidden {
+    display: block;
+}
+
+.displayed {
+    display: none;
+}
+
 /* Responsive adjustments */
 @media (max-width: 768px) {
     .about-content {
@@ -339,20 +336,22 @@ main {
     .about-right {
         width: 100%;
     }
+}
 
-    .hidden_a {
-        display: inline;
-    }
-    
-    .hidden_b {
+@media (max-width: 650px) {
+
+    .hidden {
         display: none;
     }
+
+    .displayed {
+        display: block;
+    }
 }
 
-.invisible {
-    visibility: hidden;
-}
+@media (max-width: 520px) {
 
-.visible {
-    visibility: visible;
+    .displayed {
+        display: none;
+    }
 }
