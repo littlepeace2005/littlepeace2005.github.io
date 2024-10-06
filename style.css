@@ -336,7 +336,3 @@ main {
         width: 100%;
     }
 }
-
-.module a {
-    text-decoration: underline dotted gray;
-}
