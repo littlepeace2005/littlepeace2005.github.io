@@ -94,7 +94,9 @@ header {
 /* 链接颜色保持与文字一致，且无下划线，悬停时变为抓手光标 */
 a {
     color: inherit;
-    text-decoration: none;
+    text-decoration: underline;
+    text-decoration-style: dashed;
+    text-decoration-color: #aaa;
     cursor: pointer;
 }
 
@@ -335,24 +337,4 @@ main {
     .about-right {
         width: 100%;
     }
-}
-
-a {
-    text-decoration: none;
-    position: relative;
-}
-
-a::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    bottom: -2px;
-    width: 100%;
-    height: 2px;
-    background-color: #ddd;
-    z-index: -1;
-}
-
-a:hover::after {
-    background-color: #aaa; /* 浅色下划线变为较深的颜色 */
 }
