@@ -94,8 +94,8 @@ header {
 /* 链接颜色保持与文字一致，且无下划线，悬停时变为抓手光标 */
 a {
     color: inherit;
-    text-decoration: underline;
-    text-decoration-style: dashed;
+    text-decoration: underline !important;
+    text-decoration-style: dashed !important;
     text-decoration-color: #aaa;
     cursor: pointer;
 }
