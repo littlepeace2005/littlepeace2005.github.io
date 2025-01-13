@@ -289,8 +289,8 @@ main {
 }
 
 .about-item, .about-item b {
-    vertical-align: middle; /* 确保图标和文字在垂直方向居中对齐 */
-    line-height: 1; /* 使得元素的行高一致 */
+    vertical-align: middle;
+    line-height: 1; 
 }
 
 /* Contact Section Adjustments */
@@ -335,4 +335,19 @@ main {
     .about-right {
         width: 100%;
     }
+}
+
+a::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -2px;
+    width: 100%;
+    height: 2px;
+    background-color: #ddd;
+    z-index: -1;
+}
+
+a:hover::after {
+    background-color: #aaa; /* 浅色下划线变为较深的颜色 */
 }
