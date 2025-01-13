@@ -337,6 +337,11 @@ main {
     }
 }
 
+a {
+    text-decoration: none;
+    position: relative;
+}
+
 a::after {
     content: "";
     position: absolute;
