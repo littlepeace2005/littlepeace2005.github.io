@@ -94,8 +94,7 @@ header {
 /* 链接颜色保持与文字一致，悬停时变为抓手光标 */
 a {
     color: inherit;
-    text-decoration: underline;
-    text-decoration-style: dotted;
+    text-decoration: none;
     cursor: pointer;
 }
 
@@ -122,6 +121,11 @@ a:hover {
 main {
     display: flex;
     flex-direction: column;
+}
+
+.module a {
+    text-decoration: underline;
+    text-decoration-style: dotted;
 }
 
 .module {
