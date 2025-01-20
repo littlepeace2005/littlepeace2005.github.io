@@ -91,11 +91,11 @@ header {
     background-color: #e1ecf4;
 }
 
-/* 链接颜色保持与文字一致，且无下划线，悬停时变为抓手光标 */
+/* 链接颜色保持与文字一致，悬停时变为抓手光标 */
 a {
     color: inherit;
-    text-decoration: none; /* 移除默认下划线 */
-    border-bottom: 1px dashed #333; /* 添加虚线下划线 */
+    text-decoration: underline;
+    text-decoration-style: dotted;
     cursor: pointer;
 }
 
