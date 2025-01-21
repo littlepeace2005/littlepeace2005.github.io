@@ -125,7 +125,7 @@ main {
 
 .module a {
     text-decoration: underline;
-    text-decoration-style: dotted;
+    text-decoration-style: dashed;
 }
 
 .module {
