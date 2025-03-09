@@ -167,10 +167,10 @@ main {
 }
 
 .module-right {
+    flex: 1;
     display: flex;
     justify-content: center;
     flex-direction: column;
-    flex: 1;
 }
 
 .module-right h3 {
@@ -204,6 +204,20 @@ main {
 @media (max-width: 768px) {
     .module {
         padding: 25px;
+    }
+}
+
+@media (max-width: 350px) {
+    .module {
+        padding: 25px;
+    }
+    .module-item {
+        flex-direction: column;
+    }
+
+    .module-left {
+        justify-content: center;
+        flex: none;
     }
 }
 
