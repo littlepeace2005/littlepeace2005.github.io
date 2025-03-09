@@ -9,6 +9,8 @@ body {
     background-color: #f4f4f4;
     color: #333;
     padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
 }
 
 /* Banner Section */
