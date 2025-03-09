@@ -207,20 +207,6 @@ main {
     }
 }
 
-@media (max-width: 350px) {
-    .module {
-        padding: 25px;
-    }
-    .module-item {
-        flex-direction: column;
-    }
-
-    .module-left {
-        justify-content: center;
-        flex: none;
-    }
-}
-
 /* Skills Grid Section */
 .skills-grid {
     display: flex;
