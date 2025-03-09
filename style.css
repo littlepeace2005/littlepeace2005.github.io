@@ -13,6 +13,12 @@ body {
     margin: 0 auto;
 }
 
+img {
+  pointer-events: none;
+  user-drag: none;
+  -webkit-user-drag: none;
+}
+
 /* Banner Section */
 .banner {
     width: 100%;
