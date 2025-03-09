@@ -156,7 +156,7 @@ main {
 
 .module-left {
     display: flex;
-    flex: 0 0 80px;
+    flex: 0 0 60px;
 }
 
 .module-img {
@@ -204,9 +204,6 @@ main {
 @media (max-width: 768px) {
     .module {
         padding: 25px;
-    }
-    .module-left {
-        flex: 0 0 60px;
     }
 }
 
