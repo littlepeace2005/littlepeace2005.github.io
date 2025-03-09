@@ -155,6 +155,7 @@ main {
 }
 
 .module-left {
+    display: flex;
     flex: 0 0 80px;
 }
 
@@ -166,6 +167,9 @@ main {
 }
 
 .module-right {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
     flex: 1;
 }
 
