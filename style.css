@@ -390,6 +390,10 @@ main {
         box-shadow: 0 0 10px rgba(255, 255, 255, 0.05);
     }
 
+    .profile-pic {
+        border: 5px solid #1e1e1e;
+    }
+
     /* ====== 文本层次优化 ====== */
     
     h1, h2, h3 {
