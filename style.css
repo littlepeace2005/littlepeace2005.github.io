@@ -408,8 +408,12 @@ main {
         color: #dddddd !important;
     }
 
-    h5, h6 {
+    h5 {
         color: #cccccc !important;
+    }
+
+    h6 {
+        color: #aaaaaa !important;
     }
 
     p, li, span, .about-right p {
@@ -441,6 +445,10 @@ main {
     .profile-actions a.button:hover {
         background-color: #005f99;
         color: #f0f0f0;
+    }
+
+    .profile-actions a.button span {
+        color: #66b3ff !important;
     }
 
     a:hover {
