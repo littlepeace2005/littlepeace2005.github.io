@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bryan's Resumé</title>
+    <link rel="icon" type="image/x-icon" href="/img/favicon.ico">
+    <!-- Font Awesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- Header with Profile Banner and Basic Information -->
+    <header>
+        <div class="banner"></div>
+        <div class="profile-info">
+            <img src="img/profile.jpg" alt="Profile Picture" class="profile-pic">
+            <div class="info-text">
+                <h1 data-lang="en">Bryan Wang<span class="pronoun">(He/Him)</span></h1>
+                <h1 data-lang="zh">王石<span class="pronoun">(他)</span></h1>
+                <p data-lang="en">UCLA Electrical Engr ‘27</p>
+                <p data-lang="zh">UCLA 27届电气工程</p>
+            </div>
+        </div>
+        <div class="profile-actions">
+            <a href="#contact" class="button"><i class="fas fa-envelope"></i>
+                <span data-lang="en">Contact</span>
+                <span data-lang="zh">联系方式</span>
+            </a>
+            <a href="javascript:void(0)" class="button" onclick="toggleLang()"><i class="fas fa-language"></i>
+                <span data-lang="en">简体中文</span>
+                <span data-lang="zh">English (US)</span>
+            </a>
+        </div>
+    </header>
+
+    <!-- Main Section with Modules -->
+    <main>
+        <!-- About Section -->
+        <section class="module about-section">
+            <h2>About</h2>
+            <div class="about-content">
+                <div class="about-left">
+                    <div class="about-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span data-lang="en">From&nbsp;<b>🇨🇦 Toronto, Ontario&nbsp;&nbsp;</b></span>
+                        <span data-lang="zh">来自&nbsp;<b>🇨🇦 安大略 多伦多&nbsp;&nbsp;</b></span>
+                    </div>
+                    <div class="about-item">
+                        <i class="fas fa-home"></i>
+                        <span data-lang="en">Lives in&nbsp;<b>🇺🇸 Los Angeles, California&nbsp;&nbsp;</b></span>
+                        <span data-lang="zh">现居&nbsp;<b>🇺🇸 加利福尼亚 洛杉矶&nbsp;&nbsp;</b></span>
+                    </div>
+                </div>
+                <div class="about-right">
+                    <p data-lang="en">Third-year EE major at UCLA. Previously engaged in NLP research at Tsinghua University and product R&D at Unity. Looking forward to connecting with amazing people and contributing to impactful projects in hardware technology, software development, robotics, and AI.</p>
+                    <p data-lang="zh">加州大学洛杉矶分校电气工程专业大三在读。曾在清华大学从事自然语言处理研究，以及在Unity从事产品研发。期待与优秀人才交流并为硬件技术、软件开发、机器人和人工智能领域有影响力的项目与研究做出贡献。</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Experience Section -->
+        <section class="module">
+            <h2 data-lang="en">Experience</h2>
+            <h2 data-lang="zh">工作经历</h2>
+            <div class="module-item">
+                <div class="module-left">
+                    <img src="img/unity.png" alt="Logo" class="module-img">
+                </div>
+                <div class="module-right">
+                    <h3 data-lang="en"><a href="https://unity.com" target="_blank">Unity Technologies</a></h3>
+                    <h3 data-lang="zh"><a href="https://unity.com" target="_blank">Unity科技</a></h3>
+                    <h4 data-lang="en">Software Engineer Intern · Internship</h4>
+                    <h4 data-lang="zh">软件工程实习生 · 实习</h4>
+                    <h5 data-lang="en">Shanghai, CHN (On-site)</h5>
+                    <h5 data-lang="zh">中国 上海（现场办公）</h5>
+                    <h6 data-lang="en">Jun 2025 - Aug 2025</h6>
+                    <h6 data-lang="zh">2025年6月 - 2025年8月</h6>
+                    <ul>
+                        <li data-lang="en">Built major components of the PC core SDK of WebGL minigame hosting platform on Electron, encompassing UI control, input logic, muti-display adaptation, cross-platform support, and IPC</li>
+                        <li data-lang="zh">构建基于Electron的WebGL小游戏宿主平台电脑端核心软件开发工具包的主要组件，涵盖界面控制、输入逻辑、多屏适配、跨平台支持及进程间通信</li>
+                        <li data-lang="en">Drove key updates to its Android runtime SDK and sample activity on V8, enabling dynamic data fetching, optimizing caching strategies, and streamlining package loading to reduce TTID</li>
+                        <li data-lang="zh">主导其基于V8的安卓端运行时软件开发工具包及其示例应用的关键更新，实现动态数据获取，优化缓存策略并改进包加载以减小首帧绘制时间</li>
+                        <li data-lang="en">Facilitated integration of its app with Unity Hub, establishing delegated game handle listening, and implementing parallel decryption and deferred download for WASM resources to TTFD</li>
+                        <li data-lang="zh">推动其应用程序与Unity Hub的集成，建立游戏句柄委托监机制听并通过实现WASM资源的并行解密与延迟下载使完全绘制时间最小化</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="module-item">
+                <div class="module-left">
+                    <img src="img/thu.png" alt="Logo" class="module-img">
+                </div>
+                <div class="module-right">
+                    <h3 data-lang="en"><a href="https://air.tsinghua.edu.cn/en/About_Us/About_AIR.htm" target="_blank">Institute for AI Industry Research, Tsinghua University</a></h3>
+                    <h3 data-lang="zh"><a href="https://air.tsinghua.edu.cn/en/About_Us/About_AIR.htm" target="_blank">清华大学智能产业研究院</a></h3>
+                    <h4 data-lang="en">Research Intern · Internship</h4>
+                    <h4 data-lang="zh">科研实习生 · 实习</h4>
+                    <h5 data-lang="en">Beijing, CHN (Hybrid)</h5>
+                    <h5 data-lang="zh">中国 北京（混合办公）</h5>
+                    <h6 data-lang="en">Aug 2024 - Jan 2025</h6>
+                    <h6 data-lang="zh">2024年8月 - 2025年1月</h6>
+                    <ul>
+                        <li data-lang="en">Conducted research on long-context processing, addressing the LLM context window limitations and attention decay, and scaling textual data input from 200K to 1M+ tokens for deep knowledge extraction</li>
+                        <li data-lang="zh">开展有关长文本处理的研究，解决大语言模型的上下文窗口限制和注意力衰减，将文本输入规模从20万词元扩展到超过100万个，实现深度知识提取</li>
+                        <li data-lang="en">Designed benchmark suites spanning 60+ literary classics for rigorous evaluation of sliding-window, parameter-reduced, and RAG approaches on factual understanding and higher-order inference tasks</li>
+                        <li data-lang="zh">设计涵盖60余部文学经典的基准测试套件，用于系统评估滑动窗口、参数压缩及检索增强生成方法的技术路线在事实理解与高阶推理任务中的表现</li>
+                        <li data-lang="en">Contributed to a literature Q&A agent for clients on an optimized GraphRAG framework, improving multi-hop reasoning accuracy by 23% over baseline models on complex unstructured narratives</li>
+                        <li data-lang="zh">参与为客户打造的基于创新的图检索增强框架的文学名著问答智能体的开发，在针对复杂非结构化叙事文本的多跳推理上其准确率较基线模型提升23%</li>
+                    </ul>
+                </div>
+            </div>
+            <!--
+            <div class="module-item">
+                <div class="module-left">
+                    <img src="img/magics.png" alt="Logo" class="module-img">
+                </div>
+                <div class="module-right">
+                    <h3><a href="https://www.appmagics.com/#/about" target="_blank">Magics Tech</a></h3>
+                    <h4>Technical Intern · Internship</h4>
+                    <h5>Beijing, China (On-site)</h5>
+                    <h6>Jul 2022 - Aug 2022</h6>
+                    <ul>
+                        <li>Delivered IT support during company relocation by setting up hardware, configuring network systems, and deploying essential environments on workstations for development operations</li>
+                        <li>Designed intelligent digital avatars for livestream anchors, integrating facial expressions, gestures, and personalized tone to enhance immersive real-time interaction on XR metaverse platforms</li>
+                    </ul>
+                </div>
+            </div>
+            -->
+        </section>
+
+        <!-- Education Section -->
+        <section class="module">
+            <h2 data-lang="en">Education</h2>
+            <h2 data-lang="zh">教育背景</h2>
+            <div class="module-item">
+                <div class="module-left">
+                    <img src="img/ucla.png" alt="Logo" class="module-img">
+                </div>
+                <div class="module-right">
+                    <h3 data-lang="en"><a href="https://www.ucla.edu/about" target="_blank">University of California, Los Angeles</a></h3>
+                    <h3 data-lang="zh"><a href="https://www.ucla.edu/about" target="_blank">加利福尼亚大学洛杉矶分校</a></h3>
+                    <h4 data-lang="en">Henry Samueli School of Engineering and Applied Science</h4>
+                    <h4 data-lang="zh">亨利·萨缪里工程与应用科学院</h4>
+                    <h5 data-lang="en">Bachelor of Science, Electrical Engineering</h5>
+                    <h5 data-lang="zh">电气工程 理学学士</h5>
+                    <h6 data-lang="en">Jun 2027</h6>
+                    <h6 data-lang="zh">2027年6月</h6>
+                </div>
+            </div>
+            <div class="module-item">
+                <div class="module-left">
+                    <img src="img/bhsf.png" alt="Logo" class="module-img">
+                </div>
+                <div class="module-right">
+                    <h3 data-lang="en"><a href="https://bhsf.lezhiyun.com/cms/bjszy/introduction.jhtml" target="_blank">Beijing No.4 High School</a></h3>
+                    <h3 data-lang="zh"><a href="https://bhsf.lezhiyun.com/cms/bjszy/introduction.jhtml" target="_blank">北京市第四中学</a></h3>
+                    <h4 data-lang="en">International Campus</h4>
+                    <h4 data-lang="zh">国际校区</h4>
+                    <h5 data-lang="en">High School Diploma</h5>
+                    <h5 data-lang="zh">高中文凭</h5>
+                    <h6 data-lang="en">May 2023</h6>
+                    <h6 data-lang="zh">2023年5月</h6>
+                </div>
+            </div>
+        </section>
+
+        <!-- Projects Section -->
+        <!--
+        <section class="module">
+            <h2>Projects</h2>
+            <div class="module-item no-image">
+                <div class="module-right">
+                    <h3>The Pax Programming Language</h3>
+                    <p>High-level, general-purpose programming language with an intuitive syntax and powerful capabilities.</p>
+                </div>
+            </div>
+            <div class="module-item no-image">
+                <div class="module-right">
+                    <h3>Peace JSON</h3>
+                    <p>Lightweight C++ JSON library for fast JSON parsing, editing, and stringification.</p>
+                </div>
+            </div>
+        </section>
+        -->
+
+        <!-- Honors Section -->
+        <section class="module">
+            <h2 data-lang="en">Honors & awards</h2>
+            <h2 data-lang="zh">荣誉奖项</h2>
+            <div class="module-item">
+                <div class="module-left">
+                    <img src="img/hkn.png" alt="Logo" class="module-img">
+                </div>
+                <div class="module-right">
+                    <h3 data-lang="en">Eta Kappa Nu</h3>
+                    <h3 data-lang="zh">伊塔·卡帕·纽</h3>
+                    <h5 data-lang="en">Issued by <a href="https://hkn.ee.ucla.edu/about" target="_blank">HKN Iota Gamma Chapter</a></h5>
+                    <h5 data-lang="zh">颁发机构：<a href="https://hkn.ee.ucla.edu/about" target="_blank">HKN约塔·伽马分会</a></h5>
+                    <h6 data-lang="en">Dec 2025</h6>
+                    <h6 data-lang="zh">2025年12月</h6>
+                </div>
+            </div>
+            <div class="module-item">
+                <div class="module-left">
+                    <img src="img/collegeboard.png" alt="Logo" class="module-img">
+                </div>
+                <div class="module-right">
+                    <h3 data-lang="en">AP Scholar with Distinction</h3>
+                    <h3 data-lang="zh">AP杰出学者</h3>
+                    <h5 data-lang="en">Issued by <a href="https://about.collegeboard.org" target="_blank">College Board</a></h5>
+                    <h5 data-lang="zh">颁发机构：<a href="https://about.collegeboard.org" target="_blank">美国大学理事会</a></h5>
+                    <h6 data-lang="en">Jul 2023</h6>
+                    <h6 data-lang="zh">2023年7月</h6>
+                </div>
+            </div>
+        </section>
+
+        <!-- Organizations Section -->
+        <section class="module">
+            <h2 data-lang="en">Orgnizations</h2>
+            <h2 data-lang="en">参与组织</h2>
+            <div class="module-item">
+                <div class="module-left">
+                    <img src="img/ieee.png" alt="Logo" class="module-img">
+                </div>
+                <div class="module-right">
+                    <h3 data-lang="en"><a href="https://www.ieee.org/about-ieee" target="_blank">Institute of Electrical and Electronics Engineers</a></h3>
+                    <h3 data-lang="zh"><a href="https://www.ieee.org/about-ieee" target="_blank">电气电子工程师协会</a></h3>
+                    <h6 data-lang="en">Sep 2023 - Present</h6>
+                    <h6 data-lang="zh">2023年9月 - 至今</h6>
+                </div>
+            </div>
+        </section>
+
+        <!-- Volunteering Section -->
+        <section class="module">
+            <h2 data-lang="en">Volunteering</h2>
+            <h2 data-lang="zh">志愿服务</h2>
+            <div class="module-item">
+                <div class="module-left">
+                    <img src="img/aaase.png" alt="Logo" class="module-img">
+                </div>
+                <div class="module-right">
+                    <h3 data-lang="en">Event Assistant</h3>
+                    <h3 data-lang="zh">活动助理</h3>
+                    <h4 data-lang="en"><a href="https://www.aaase.org/about-us" target="_blank">Asian American Academy of Science and Engineering</a></h4>
+                    <h4 data-lang="zh"><a href="https://www.aaase.org/about-us" target="_blank">亚裔美国科学与工程学院</a></h4>
+                    <p data-lang="en">Managed registration, coordinated sessions and supported attendees at the inaugural summit</p>
+                    <p data-lang="zh">为首届峰会管理注册，协调会议并支持与会人员</p>
+                </div>
+            </div>
+            <div class="module-item">
+                <div class="module-left">
+                    <img src="img/asdan.png" alt="Logo" class="module-img">
+                </div>
+                <div class="module-right">
+                    <h3 data-lang="en">ESL Teacher</h3>
+                    <h3 data-lang="zh">英语外语教师</h3>
+                    <h4 data-lang="en"><a href="https://www.asdan.org.uk/about-us" target="_blank">ASDAN</a></h4>
+                    <h4 data-lang="zh"><a href="https://www.asdan.org.uk/about-us" target="_blank">阿斯丹</a></h4>
+                    <p data-lang="en">Facilitated interactive sessions for rural children learning English as a second language</p>
+                    <p data-lang="zh">为英语作为第二语言的农村儿童开展互动式教学</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Certifications Section -->
+        <section class="module">
+            <h2 data-lang="en">Licenses & Certifications</h2>
+            <h2 data-lang="zh">资格认证</h2>
+            <div class="module-item">
+                <div class="module-left">
+                    <img src="img/abrsm.png" alt="Logo" class="module-img">
+                </div>
+                <div class="module-right">
+                    <h3 data-lang="en">Grade 6 Music Theory</h3>
+                    <h3 data-lang="zh">音乐理论6级</h3>
+                    <h4 data-lang="en"><a href="https://www.abrsm.org/en-us/who-we-are/about-us" target="_blank">Associated Board of the Royal Schools of Music</a></h4>
+                    <h4 data-lang="zh"><a href="https://www.abrsm.org/en-us/who-we-are/about-us" target="_blank">英国皇家音乐学院联合委员会</a></h4>
+                </div>
+            </div>
+        </section>
+
+        <!-- Skills Section -->
+        <section class="module">
+            <h2 data-lang="en">Skills</h2>
+            <div class="skills-grid">
+                <div data-lang="en" class="skill-item">Electrical Engineering</div>
+                <div data-lang="zh" class="skill-item">电气工程</div>
+                <div data-lang="en" class="skill-item">Electronics Engineering</div>
+                <div data-lang="zh" class="skill-item">电子工程</div>
+                <div data-lang="en" class="skill-item">Communications Engineering</div>
+                <div data-lang="zh" class="skill-item">通信工程</div>
+                <div data-lang="en" class="skill-item">Software Development</div>
+                <div data-lang="zh" class="skill-item">软件开发</div>
+                <div data-lang="en" class="skill-item">Interactive Media</div>
+                <div data-lang="zh" class="skill-item">互动媒体</div>
+                <div data-lang="en" class="skill-item">Academic Research</div>
+                <div data-lang="zh" class="skill-item">学术科研</div>
+            </div>
+        </section>
+
+        <!-- Languages Section -->
+        <section class="module">
+            <h2 data-lang="en">Languages</h2>
+            <h2 data-lang="zh">语言能力</h2>
+            <div class="skills-grid">
+                <div data-lang="en" class="skill-item">Chinese<p>Native/Bilingual</p></div>
+                <div data-lang="zh" class="skill-item">汉语<p>母语/双语</p></div>
+                <div data-lang="en" class="skill-item">English<p>Native/Bilingual</p></div>
+                <div data-lang="zh" class="skill-item">英语<p>母语/双语</p></div>
+            </div>
+        </section>
+
+        <!-- Activities Section -->
+        <!--
+        <section class="module">
+            <h2>Activities</h2>
+            <div class="module-item no-image">
+                <div class="module-right">
+                    <h3>2025 <a href="https://riscv-summit.com/en/#" target="_blank">RISC-V China Summit</a></h3>
+                    <h3>2021 <a href="https://en.chinajoy.net/#/cgdcPage/cgdcHome" target="_blank">China Game Developers Conference</a></h3>
+                    <h3>2021 <a href="https://en.chinajoy.net/#/cdecPage/cdecHome" target="_blank">China Digital Entertainment Congress</a></h3>
+                    <h3>2019 <a href="https://en.chinajoy.net/#/cgdcPage/cgdcHome" target="_blank">China Game Developers Conference</a></h3>
+                    <h3>2019 <a href="https://en.chinajoy.net/#/cdecPage/cdecHome" target="_blank">China Digital Entertainment Congress</a></h3>
+                </div>
+            </div>
+        </section>
+        -->
+
+        <!-- Contact Section -->
+        <section class="module contact-section" id="contact">
+            <h2 data-lang="en">Contact</h2>
+            <h2 data-lang="zh">联系方式</h2>
+            <div class="contact-item">
+                <i class="fas fa-envelope"></i>
+                <p data-lang="en">Email: <a href="mailto:bryanwang0728@gmail.com">bryanwang0278@gmail.com</a></p>
+                <p data-lang="zh">电子邮件: <a href="mailto:bryanwang0728@gmail.com">bryanwang0278@gmail.com</a></p>
+            </div>
+            <!--
+            <div class="contact-item">
+                <i class="fas fa-phone-alt"></i>
+                <a href="tel:+1234567890">+1 234 567 890</a>
+            </div>
+            <div class="contact-item">
+                <i class="fab fa-linkedin"></i>
+                <a href="https://www.linkedin.com/in/your-profile" target="_blank">LinkedIn</a>
+            </div>
+            <div class="contact-item">
+                <i class="fab fa-github"></i>
+                <a href="https://github.com/your-profile" target="_blank">GitHub</a>
+            </div>
+            <div class="contact-item">
+                <i class="fab fa-twitter"></i>
+                <a href="https://twitter.com/your-profile" target="_blank">Twitter</a>
+            </div>
+            -->
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+    <script>
+        let currentLang = 'en';
+        function setLang(lang) {
+            document.querySelectorAll('[data-lang]').forEach(el => {
+                el.style.display = el.getAttribute('data-lang') === lang ? '' : 'none';
+            });
+            // document.getElementById('lang-btn-text').innerText = lang === 'en' ? '简体中文' : 'English (US)';
+            currentLang = lang;
+            localStorage.setItem('lang', lang);
+        }
+        function toggleLang() {
+            setLang(currentLang === 'en' ? 'zh' : 'en');
+        }
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedLang = localStorage.getItem('lang') || 'en';
+            setLang(savedLang);
+        });
+    </script>
+</body>
+</html>
