@@ -18,8 +18,8 @@
     display:flex;
     justify-content:center;
     align-items:flex-start;
-    min-height:600px;
-    height:100vh;
+    min-height:600px; /* 防止太小 */
+    height:100vh; /* 随浏览器高度变化 */
     padding:20px;
   }
   .app {
@@ -49,7 +49,6 @@
     padding:14px;
     box-shadow:0 6px 20px rgba(0,0,0,.35);
     display:flex;flex-direction:column;justify-content:space-between;
-    overflow:hidden;
   }
 
   .controls {
@@ -115,31 +114,29 @@
   svg { width:100%;height:100%;display:block; }
   .footer { color:#8ea7bb;font-size:13.5px;margin-top:8px;text-align:center; }
 
-  .bottomHint { color:#8aa0b4;font-size:13.5px;margin-top:6px; }
+  .bottomHint { color:var(--muted);font-size:13.5px;margin-top:6px; }
+
   @media (max-width:720px){
-    .gridCard { flex: 0 0 auto; }
+    .gridCard{
+      /* 不再用 flex 比例高度，改回由内容撑开 */
+      flex: 0 0 auto;
+    }
     .svgWrap{
+      /* 竖屏时用等比正方形，高度自适应且不会超过视口 */
       flex: unset;
-      aspect-ratio: 1 / 1;
+      aspect-ratio: 1 / 1;   /* 回到方形，避免与父高度打架 */
       width: 100%;
       height: auto;
-      min-height: 320px;
-      max-height: 70vh;
+      min-height: 320px;     /* 可按需调 */
+      max-height: 70vh;      /* 防止超出屏幕太多 */
     }
-  }
-
-  /* 隐藏输入框样式 */
-  #hiddenInput {
-    position: absolute;
-    opacity: 0;
-    pointer-events: none;
   }
 </style>
 </head>
 <body>
   <div class="app">
     <header>
-      <div class="title">Word Hunt Helper</div>
+      <div class="title">Word Hunt Helper · Visualizer</div>
       <div class="hint">Press <span class="kbd">Enter</span> to search</div>
     </header>
 
@@ -148,8 +145,6 @@
         <div>
           <label>Enter 16 letters (row by row):</label>
           <div class="gridInput" id="gridInput"></div>
-          <!-- 隐藏输入框（移动端专用） -->
-          <input id="hiddenInput" type="text" autocapitalize="characters" maxlength="16" />
         </div>
 
         <div style="display:flex;flex-direction:column;margin-top:14px;">
@@ -159,7 +154,7 @@
             <button id="prevBtn" class="btn secondary">⏮ Prev</button>
             <button id="nextBtn" class="btn secondary">Next ⏭</button>
           </div>
-          <div class="bottomHint">Top 64 words only.</div>
+          <div class="bottomHint">Top 64 words.</div>
         </div>
       </section>
 
@@ -169,7 +164,7 @@
           <div class="legend"><i class="node"></i><span>Node</span><span class="edge"></span><span>Path</span></div>
         </div>
         <div class="svgWrap"><svg id="board" viewBox="0 0 520 520" preserveAspectRatio="xMidYMid meet"></svg></div>
-        <div class="footer">Use <span class="kbd">←</span> / <span class="kbd">→</span> to switch words.</div>
+        <div class="footer">Hint: use <span class="kbd">←</span> / <span class="kbd">→</span> to switch words.</div>
       </section>
     </div>
   </div>
@@ -186,7 +181,7 @@ class Trie{
 const N=4,DIRS=[[-1,-1],[-1,0],[-1,1],[0,-1],[0,1],[1,-1],[1,0],[1,1]];
 let trie=new Trie(),dictLoaded=false,results=[],activeIndex=-1;
 const el=id=>document.getElementById(id);
-const board=el('board'),statusPill=el('status'),gridInput=el('gridInput'),hiddenInput=el('hiddenInput');
+const board=el('board'),statusPill=el('status'),gridInput=el('gridInput');
 let lettersArr=Array(16).fill('');
 
 function createGrid(){
@@ -199,9 +194,6 @@ function createGrid(){
 }
 createGrid();
 
-function updateGrid(){[...gridInput.children].forEach((c,i)=>c.textContent=lettersArr[i]||'');}
-
-// pc input
 document.addEventListener('keydown',e=>{
   if(document.activeElement.tagName==='INPUT')return;
   if(e.key.length===1&&/[a-zA-Z]/.test(e.key)){
@@ -211,25 +203,11 @@ document.addEventListener('keydown',e=>{
     const idx=lettersArr.slice().reverse().findIndex(ch=>ch);
     if(idx!==-1)lettersArr[15-idx]='';
   }else if(e.key==='Enter'){el('runBtn').click();}
-  else if(e.key==='ArrowRight'){el('nextBtn').click();}
-  else if(e.key==='ArrowLeft'){el('prevBtn').click();}
+  else if(e.key === 'ArrowRight'){ el('nextBtn').click(); }
+  else if(e.key === 'ArrowLeft'){ el('prevBtn').click(); }
   updateGrid();
 });
-
-// mobile input
-gridInput.addEventListener('click', () => {
-  hiddenInput.focus();
-});
-document.body.addEventListener('click', e => {
-  if (!gridInput.contains(e.target)) {
-    hiddenInput.blur();
-  }
-}, true);
-hiddenInput.addEventListener('input', e => {
-  const text = e.target.value.toUpperCase().replace(/[^A-Z]/g, '').slice(0, 16);
-  lettersArr = text.padEnd(16, '').split('');
-  updateGrid();
-});
+function updateGrid(){[...gridInput.children].forEach((c,i)=>c.textContent=lettersArr[i]||'');}
 
 async function autoLoadDict(){
   try{
@@ -312,7 +290,6 @@ el('nextBtn').onclick=()=>{if(results.length)setActive(activeIndex+1)};
 el('prevBtn').onclick=()=>{if(results.length)setActive(activeIndex-1)};
 el('clearBtn').onclick=()=>{
   lettersArr=Array(16).fill('');
-  hiddenInput.value='';
   updateGrid();
   drawBoard(' '.repeat(16));
   results=[];activeIndex=-1;
