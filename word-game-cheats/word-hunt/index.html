@@ -207,6 +207,11 @@ document.addEventListener('keydown',e=>{
   else if(e.key === 'ArrowLeft'){ el('prevBtn').click(); }
   updateGrid();
 });
+document.addEventListener('beforeinput', e => {
+  if (e.data && !/^[a-zA-Z]$/.test(e.data)) {
+    e.preventDefault();
+  }
+});
 function updateGrid(){[...gridInput.children].forEach((c,i)=>c.textContent=lettersArr[i]||'');}
 
 async function autoLoadDict(){
