@@ -94,7 +94,7 @@
   }
   .legend { display:flex;gap:8px;align-items:center;font-size:12px; }
   .legend i { display:inline-block;width:9px;height:9px;border-radius:50%; }
-  .legend .node { background:var(--accent); }
+  .legend .node { background:var(--hit); }
   .legend .edge { width:14px;height:2px;border-radius:2px;background:var(--accent); }
 
   .gridCard {
@@ -159,7 +159,7 @@
       <section class="card gridCard">
         <div style="display:flex;align-items:center;justify-content:space-between;color:var(--muted);margin-bottom:6px;">
           <div class="pill" id="status">Loading dictionary...</div>
-          <div class="legend"><i class="node"></i><span>Node</span><span class="edge"></span><span>Path</span></div>
+          <div class="legend"><i class="node"></i><span>Starting node</span><span class="edge"></span><span>Path</span></div>
         </div>
         <div class="svgWrap"><svg id="board" viewBox="0 0 520 520" preserveAspectRatio="xMidYMid meet"></svg></div>
         <div class="footer">Hint: use <span class="kbd">←</span> / <span class="kbd">→</span> to switch words.</div>
