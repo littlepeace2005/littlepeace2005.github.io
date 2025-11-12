@@ -115,6 +115,17 @@
   .footer { color:#8ea7bb;font-size:13.5px;margin-top:8px;text-align:center; }
 
   .bottomHint { color:var(--muted);font-size:13.5px;margin-top:6px; }
+  @media (max-width:720px){
+    .gridCard { flex: 0 0 auto; }
+    .svgWrap{
+      flex: unset;
+      aspect-ratio: 1 / 1;
+      width: 100%;
+      height: auto;
+      min-height: 320px;
+      max-height: 70vh;
+    }
+  }
 </style>
 </head>
 <body>
