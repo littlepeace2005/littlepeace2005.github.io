@@ -49,6 +49,7 @@
     padding:14px;
     box-shadow:0 6px 20px rgba(0,0,0,.35);
     display:flex;flex-direction:column;justify-content:space-between;
+    overflow:hidden;
   }
 
   .controls {
@@ -114,7 +115,7 @@
   svg { width:100%;height:100%;display:block; }
   .footer { color:#8ea7bb;font-size:13.5px;margin-top:8px;text-align:center; }
 
-  .bottomHint { color:var(--muted);font-size:13.5px;margin-top:6px; }
+  .bottomHint { color:#8aa0b4;font-size:13.5px;margin-top:6px; }
   @media (max-width:720px){
     .gridCard { flex: 0 0 auto; }
     .svgWrap{
@@ -125,6 +126,13 @@
       min-height: 320px;
       max-height: 70vh;
     }
+  }
+
+  /* 隐藏输入框样式 */
+  #hiddenInput {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
   }
 </style>
 </head>
@@ -140,6 +148,8 @@
         <div>
           <label>Enter 16 letters (row by row):</label>
           <div class="gridInput" id="gridInput"></div>
+          <!-- 隐藏输入框（移动端专用） -->
+          <input id="hiddenInput" type="text" autocapitalize="characters" maxlength="16" />
         </div>
 
         <div style="display:flex;flex-direction:column;margin-top:14px;">
@@ -176,7 +186,7 @@ class Trie{
 const N=4,DIRS=[[-1,-1],[-1,0],[-1,1],[0,-1],[0,1],[1,-1],[1,0],[1,1]];
 let trie=new Trie(),dictLoaded=false,results=[],activeIndex=-1;
 const el=id=>document.getElementById(id);
-const board=el('board'),statusPill=el('status'),gridInput=el('gridInput');
+const board=el('board'),statusPill=el('status'),gridInput=el('gridInput'),hiddenInput=el('hiddenInput');
 let lettersArr=Array(16).fill('');
 
 function createGrid(){
@@ -189,6 +199,9 @@ function createGrid(){
 }
 createGrid();
 
+function updateGrid(){[...gridInput.children].forEach((c,i)=>c.textContent=lettersArr[i]||'');}
+
+// pc input
 document.addEventListener('keydown',e=>{
   if(document.activeElement.tagName==='INPUT')return;
   if(e.key.length===1&&/[a-zA-Z]/.test(e.key)){
@@ -198,11 +211,25 @@ document.addEventListener('keydown',e=>{
     const idx=lettersArr.slice().reverse().findIndex(ch=>ch);
     if(idx!==-1)lettersArr[15-idx]='';
   }else if(e.key==='Enter'){el('runBtn').click();}
-  else if(e.key === 'ArrowRight'){ el('nextBtn').click(); }
-  else if(e.key === 'ArrowLeft'){ el('prevBtn').click(); }
+  else if(e.key==='ArrowRight'){el('nextBtn').click();}
+  else if(e.key==='ArrowLeft'){el('prevBtn').click();}
   updateGrid();
 });
-function updateGrid(){[...gridInput.children].forEach((c,i)=>c.textContent=lettersArr[i]||'');}
+
+// mobile input
+gridInput.addEventListener('click', () => {
+  hiddenInput.focus();
+});
+document.body.addEventListener('click', e => {
+  if (!gridInput.contains(e.target)) {
+    hiddenInput.blur();
+  }
+}, true);
+hiddenInput.addEventListener('input', e => {
+  const text = e.target.value.toUpperCase().replace(/[^A-Z]/g, '').slice(0, 16);
+  lettersArr = text.padEnd(16, '').split('');
+  updateGrid();
+});
 
 async function autoLoadDict(){
   try{
@@ -285,6 +312,7 @@ el('nextBtn').onclick=()=>{if(results.length)setActive(activeIndex+1)};
 el('prevBtn').onclick=()=>{if(results.length)setActive(activeIndex-1)};
 el('clearBtn').onclick=()=>{
   lettersArr=Array(16).fill('');
+  hiddenInput.value='';
   updateGrid();
   drawBoard(' '.repeat(16));
   results=[];activeIndex=-1;
