@@ -118,17 +118,15 @@
 
   @media (max-width:720px){
     .gridCard{
-      /* 不再用 flex 比例高度，改回由内容撑开 */
       flex: 0 0 auto;
     }
     .svgWrap{
-      /* 竖屏时用等比正方形，高度自适应且不会超过视口 */
       flex: unset;
-      aspect-ratio: 1 / 1;   /* 回到方形，避免与父高度打架 */
+      aspect-ratio: 1 / 1;
       width: 100%;
       height: auto;
-      min-height: 320px;     /* 可按需调 */
-      max-height: 70vh;      /* 防止超出屏幕太多 */
+      min-height: 320px;
+      max-height: 70vh;
     }
   }
 </style>
@@ -136,7 +134,7 @@
 <body>
   <div class="app">
     <header>
-      <div class="title">Word Hunt Helper · Visualizer</div>
+      <div class="title">Word Hunt Helper</div>
       <div class="hint">Press <span class="kbd">Enter</span> to search</div>
     </header>
 
