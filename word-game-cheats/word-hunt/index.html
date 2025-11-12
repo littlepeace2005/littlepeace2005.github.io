@@ -138,7 +138,7 @@
             <button id="prevBtn" class="btn secondary">⏮ Prev</button>
             <button id="nextBtn" class="btn secondary">Next ⏭</button>
           </div>
-          <div class="bottomHint">Top 64 words.</div>
+          <div class="bottomHint">Top 64 words only.</div>
         </div>
       </section>
 
@@ -187,6 +187,8 @@ document.addEventListener('keydown',e=>{
     const idx=lettersArr.slice().reverse().findIndex(ch=>ch);
     if(idx!==-1)lettersArr[15-idx]='';
   }else if(e.key==='Enter'){el('runBtn').click();}
+  else if(e.key === 'ArrowRight'){ el('nextBtn').click(); }
+  else if(e.key === 'ArrowLeft'){ el('prevBtn').click(); }
   updateGrid();
 });
 function updateGrid(){[...gridInput.children].forEach((c,i)=>c.textContent=lettersArr[i]||'');}
