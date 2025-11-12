@@ -167,7 +167,6 @@
     </div>
   </div>
 
-  <!-- ✅ 隐藏输入框：用于移动端输入 -->
   <input id="hiddenInput" type="text" inputmode="latin" maxlength="16"
     style="position:absolute;opacity:0;pointer-events:none;" />
 
@@ -199,7 +198,12 @@ createGrid();
 
 function updateGrid(){[...gridInput.children].forEach((c,i)=>c.textContent=lettersArr[i]||'');}
 
-gridCell.addEventListener('click', ()=> hiddenInput.focus());
+gridInput.addEventListener('click', ()=> hiddenInput.focus());
+document.addEventListener('click', e => {
+  if (!gridInput.contains(e.target)) {
+    hiddenInput.blur();
+  }
+});
 hiddenInput.addEventListener('input', e=>{
   const val = e.target.value.toUpperCase().replace(/[^A-Z]/g,'');
   lettersArr = val.split('').slice(0,16);
