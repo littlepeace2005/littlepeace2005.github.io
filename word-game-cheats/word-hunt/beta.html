@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Word Hunt Helper</title>
+<style>
+  :root {
+    --bg:#0b0f14; --panel:#121821; --muted:#8aa0b4; --ink:#dbe7f4; --accent:#6fd3ff; --hit:#60ffa7;
+  }
+  * { box-sizing:border-box; }
+  html, body { height:100%; }
+  body {
+    margin:0;
+    font:15px/1.4 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;
+    color:var(--ink);
+    background:linear-gradient(180deg,#0b0f14,#0a1018 60%,#0b0f14);
+    display:flex;
+    justify-content:center;
+    align-items:flex-start;
+    min-height:600px;
+    height:100vh;
+    padding:20px;
+  }
+  .app {
+    width:min(900px,100%);
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+    height:100%;
+  }
+  header { display:flex; justify-content:space-between; align-items:center; }
+  .title { font-size:20px; font-weight:700; }
+  .hint { color:var(--muted); font-size:13.5px; }
+  .kbd {
+    display:inline-grid; place-items:center;
+    padding:.15rem .4rem; border-radius:5px;
+    background:#0e1620; border:1px solid #223042;
+    color:#c9d8e6; font-size:11px;
+  }
+
+  .row { display:flex; gap:14px; align-items:stretch; flex:1; min-height:0; }
+  @media (max-width:720px){ .row{flex-direction:column;} }
+
+  .card {
+    background:var(--panel);
+    border:1px solid #1b2430;
+    border-radius:14px;
+    padding:14px;
+    box-shadow:0 6px 20px rgba(0,0,0,.35);
+    display:flex;flex-direction:column;justify-content:space-between;
+  }
+
+  .controls {
+    flex:0 0 260px;
+    display:flex;flex-direction:column;justify-content:space-between;
+  }
+
+  label { font-size:13.5px;color:var(--muted);display:block;margin-bottom:6px; }
+  .gridInput {
+    display:grid;
+    grid-template-columns:repeat(4,52px);
+    grid-auto-rows:52px;
+    justify-content:start;
+    column-gap:4px; row-gap:6px; margin-top:4px;
+  }
+  .gridCell {
+    width:52px;height:52px;display:flex;align-items:center;justify-content:center;
+    border-radius:8px;background:#0f141c;border:1px solid #203040;
+    font-size:24px;font-weight:700;text-transform:uppercase;
+  }
+
+  .btn {
+    cursor:pointer;border:0;padding:10px 12px;border-radius:10px;
+    font-weight:650;font-size:14px;color:#03111a;
+    background:linear-gradient(180deg,#89e3ff,#48c7ff);
+    box-shadow:0 6px 18px rgba(64,200,255,.35);
+    width:100%;
+  }
+  .btn.secondary {
+    background:#1a2736;color:var(--ink);
+    border:1px solid #2a3a4f;box-shadow:none;
+  }
+
+  .btnGrid {
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:8px;
+    margin-top:12px;
+  }
+
+  .pill { padding:.1rem .5rem;border:1px solid #254057;
+    border-radius:999px;color:#a9c6dc;font-size:12px;
+  }
+  .legend { display:flex;gap:8px;align-items:center;font-size:12px; }
+  .legend i { display:inline-block;width:9px;height:9px;border-radius:50%; }
+  .legend .node { background:var(--hit); }
+  .legend .edge { width:14px;height:2px;border-radius:2px;background:var(--accent); }
+
+  .gridCard {
+    flex:2 1 520px;
+    display:flex;flex-direction:column;justify-content:space-between;
+    min-height:0;
+  }
+  .svgWrap {
+    flex:1;
+    width:100%;
+    min-height:300px;
+    border-radius:12px;
+    background:#0b1118;
+    border:1px solid #1a2431;
+    overflow:hidden;
+  }
+  svg { width:100%;height:100%;display:block; }
+  .footer { color:#8ea7bb;font-size:13.5px;margin-top:8px;text-align:center; }
+
+  .bottomHint { color:var(--muted);font-size:13.5px;margin-top:6px; }
+
+  @media (max-width:720px){
+    .gridCard{
+      flex: 0 0 auto;
+    }
+    .svgWrap{
+      flex: unset;
+      aspect-ratio: 1 / 1;
+      width: 100%;
+      height: auto;
+      min-height: 320px;
+      max-height: 70vh;
+    }
+  }
+</style>
+</head>
+<body>
+  <div class="app">
+    <header>
+      <div class="title">Word Hunt Helper</div>
+      <div class="hint">Press <span class="kbd">Enter</span> to search</div>
+    </header>
+
+    <div class="row">
+      <section class="card controls">
+        <div>
+          <label>Enter 16 letters (row by row):</label>
+          <div class="gridInput" id="gridInput"></div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;margin-top:14px;">
+          <div class="btnGrid">
+            <button id="runBtn" class="btn">Search</button>
+            <button id="clearBtn" class="btn secondary">Clear</button>
+            <button id="prevBtn" class="btn secondary">⏮ Prev</button>
+            <button id="nextBtn" class="btn secondary">Next ⏭</button>
+          </div>
+          <div class="bottomHint">Up to 64 words.</div>
+        </div>
+      </section>
+
+      <section class="card gridCard">
+        <div style="display:flex;align-items:center;justify-content:space-between;color:var(--muted);margin-bottom:6px;">
+          <div class="pill" id="status">Loading dictionary...</div>
+          <div class="legend"><i class="node"></i><span>Starting node</span><span class="edge"></span><span>Path</span></div>
+        </div>
+        <div class="svgWrap"><svg id="board" viewBox="0 0 520 520" preserveAspectRatio="xMidYMid meet"></svg></div>
+        <div class="footer">Use <span class="kbd">←</span> / <span class="kbd">→</span> to switch words.</div>
+      </section>
+    </div>
+  </div>
+
+  <!-- ✅ 隐藏输入框：用于移动端输入 -->
+  <input id="hiddenInput" type="text" inputmode="latin" maxlength="16"
+    style="position:absolute;opacity:0;pointer-events:none;" />
+
+<script>
+class TrieNode{constructor(){this.isWord=false;this.next=new Map()}}
+class Trie{
+  constructor(){this.root=new TrieNode()}
+  insert(w){let n=this.root;for(let ch of w.toLowerCase()){if(!n.next.has(ch))n.next.set(ch,new TrieNode());n=n.next.get(ch)}n.isWord=true}
+  startsWith(p){let n=this.root;for(let ch of p.toLowerCase()){if(!n.next.has(ch))return false;n=n.next.get(ch)}return true}
+  search(w){let n=this.root;for(let ch of w.toLowerCase()){if(!n.next.has(ch))return false;n=n.next.get(ch)}return n.isWord}
+}
+
+const N=4,DIRS=[[-1,-1],[-1,0],[-1,1],[0,-1],[0,1],[1,-1],[1,0],[1,1]];
+let trie=new Trie(),dictLoaded=false,results=[],activeIndex=-1;
+let lockedLetters = null;
+const el=id=>document.getElementById(id);
+const board=el('board'),statusPill=el('status'),gridInput=el('gridInput'),hiddenInput=el('hiddenInput');
+let lettersArr=Array(16).fill('');
+
+function createGrid(){
+  gridInput.innerHTML='';
+  for(let i=0;i<16;i++){
+    const cell=document.createElement('div');
+    cell.className='gridCell';
+    gridInput.appendChild(cell);
+  }
+}
+createGrid();
+
+function updateGrid(){[...gridInput.children].forEach((c,i)=>c.textContent=lettersArr[i]||'');}
+
+gridInput.addEventListener('click', ()=> hiddenInput.focus());
+hiddenInput.addEventListener('input', e=>{
+  const val = e.target.value.toUpperCase().replace(/[^A-Z]/g,'');
+  lettersArr = val.split('').slice(0,16);
+  updateGrid();
+});
+
+document.addEventListener('keydown',e=>{
+  if(document.activeElement.tagName==='INPUT' && e.target!==hiddenInput)return;
+  if(e.key.length===1&&/[a-zA-Z]/.test(e.key)){
+    const idx=lettersArr.findIndex(ch=>!ch);
+    if(idx!==-1)lettersArr[idx]=e.key.toUpperCase();
+  }else if(e.key==='Backspace'){
+    const idx=lettersArr.slice().reverse().findIndex(ch=>ch);
+    if(idx!==-1)lettersArr[15-idx]='';
+  }else if(e.key==='Enter'){el('runBtn').click();}
+  else if(e.key === 'ArrowRight'){ el('nextBtn').click(); }
+  else if(e.key === 'ArrowLeft'){ el('prevBtn').click(); }
+  updateGrid();
+});
+
+document.addEventListener('beforeinput', e => {
+  if (e.data && !/^[a-zA-Z]$/.test(e.data)) e.preventDefault();
+});
+
+async function autoLoadDict(){
+  try{
+    const res=await fetch('../scrabble_words.txt');
+    if(!res.ok)throw new Error('not found');
+    const text=await res.text();
+    for(const line of text.split(/\r?\n/)){
+      const w=line.trim().toLowerCase();
+      if(w&&/^[a-z]{3,}$/.test(w))trie.insert(w);
+    }
+    dictLoaded=true;
+    statusPill.textContent='Dictionary loaded';
+  }catch(e){statusPill.textContent='❌ Dictionary not found';}
+}
+autoLoadDict();
+
+function getLetters(){return lettersArr.join('').toLowerCase();}
+function searchAll(letters){
+  const grid=Array.from({length:N},(_,r)=>Array.from({length:N},(_,c)=>letters[r*N+c]));
+  const used=Array.from({length:N},()=>Array(N).fill(false));
+  const found=new Map();
+  function dfs(r,c,cur,coords){
+    if(!trie.startsWith(cur))return;
+    if(cur.length>=3&&trie.search(cur)){
+      const path=coords.map(([rr,cc])=>`${rr+1}${cc+1}`).join(' ');
+      if(!found.has(cur))found.set(cur,path);
+    }
+    for(const[dr,dc]of DIRS){
+      const nr=r+dr,nc=c+dc;
+      if(nr<0||nr>=N||nc<0||used[nr][nc])continue;
+      used[nr][nc]=true;
+      dfs(nr,nc,cur+grid[nr][nc],coords.concat([[nr,nc]]));
+      used[nr][nc]=false;
+    }
+  }
+  for(let r=0;r<N;r++)for(let c=0;c<N;c++){
+    used[r][c]=true;dfs(r,c,grid[r][c],[[r,c]]);used[r][c]=false;
+  }
+  const vec=[];
+  for(const[w,p]of found.entries()){vec.push({word:w,pathStr:p,coords:p.split(' ').map(s=>[+s[0]-1,+s[1]-1])});}
+  vec.sort((a,b)=>b.word.length-a.word.length||a.word.localeCompare(b.word));
+  return vec.slice(0,64);
+}
+
+function node(tag,a){const e=document.createElementNS('http://www.w3.org/2000/svg',tag);for(const k in a)e.setAttribute(k,a[k]);return e;}
+function drawBoard(letters){
+  board.innerHTML='';
+  const size=520,pad=20,cell=(size-2*pad)/N;
+  for(let r=0;r<N;r++)for(let c=0;c<N;c++){
+    const x=pad+c*cell,y=pad+r*cell;
+    board.appendChild(node('rect',{x,y,width:cell-2,height:cell-2,rx:14,ry:14,fill:'#0f1620',stroke:'#1e2b3b'}));
+  }
+  for(let r=0;r<N;r++)for(let c=0;c<N;c++){
+    const x=pad+c*cell+cell/2,y=pad+r*cell+cell/2+8,ch=letters[r*N+c]?.toUpperCase()||'';
+    const t=node('text',{x,y,fill:'#dbe7f4','text-anchor':'middle','font-size':40,'font-weight':700});t.textContent=ch;board.appendChild(t);
+  }
+}
+function drawPath(coords){
+  const size=520,pad=20,cell=(size-2*pad)/N;
+  const pts=coords.map(([r,c])=>[pad+c*cell+cell/2,pad+r*cell+cell/2]);
+  for(let i=0;i<pts.length-1;i++){const[x1,y1]=pts[i],[x2,y2]=pts[i+1];board.appendChild(node('line',{x1,y1,x2,y2,stroke:'#6fd3ff','stroke-width':6,'stroke-linecap':'round'}));}
+  coords.forEach(([r,c],i)=>{const cx=pad+c*cell+cell/2,cy=pad+r*cell+cell/2;board.appendChild(node('circle',{cx,cy,r:14,fill:i? '#6fd3ff':'#60ffa7'}));});
+}
+function setActive(i){
+  if(!results.length)return;activeIndex=(i+results.length)%results.length;
+  const r=results[activeIndex];
+  statusPill.textContent=`${activeIndex+1}/${results.length} · ${r.word}`;
+  drawBoard(lockedLetters||getLetters());drawPath(r.coords);
+}
+
+el('runBtn').onclick=()=>{
+  if(!dictLoaded){alert('Dictionary not loaded.');return;}
+  const letters=getLetters();
+  if(letters.length!==16){alert('Please enter 16 letters.');return;}
+  results=searchAll(letters);
+  if(!results.length){statusPill.textContent='No word found';drawBoard(letters);return;}
+  lockedLetters = getLetters();
+  setActive(0);
+};
+el('nextBtn').onclick=()=>{if(results.length)setActive(activeIndex+1)};
+el('prevBtn').onclick=()=>{if(results.length)setActive(activeIndex-1)};
+el('clearBtn').onclick=()=>{
+  lettersArr=Array(16).fill('');
+  updateGrid();
+  hiddenInput.value='';
+  drawBoard(' '.repeat(16));
+  results=[];activeIndex=-1;
+  lockedLetters = null;
+  if(dictLoaded){statusPill.textContent='Cleared';}
+};
+drawBoard(' '.repeat(16));
+</script>
+</body>
+</html>
