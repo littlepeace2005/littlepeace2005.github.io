@@ -152,7 +152,7 @@
             <button id="prevBtn" class="btn secondary">⏮ Prev</button>
             <button id="nextBtn" class="btn secondary">Next ⏭</button>
           </div>
-          <div class="bottomHint">Up to 64 words</div>
+          <div class="bottomHint">Up to 64 words.</div>
         </div>
       </section>
 
@@ -162,10 +162,13 @@
           <div class="legend"><i class="node"></i><span>Starting node</span><span class="edge"></span><span>Path</span></div>
         </div>
         <div class="svgWrap"><svg id="board" viewBox="0 0 520 520" preserveAspectRatio="xMidYMid meet"></svg></div>
-        <div class="footer">Use <span class="kbd">←</span> / <span class="kbd">→</span> to switch words</div>
+        <div class="footer">Use <span class="kbd">←</span> / <span class="kbd">→</span> to switch words.</div>
       </section>
     </div>
   </div>
+
+  <input id="hiddenInput" type="text" inputmode="latin" maxlength="16"
+    style="position:absolute;opacity:0;pointer-events:none;" />
 
 <script>
 class TrieNode{constructor(){this.isWord=false;this.next=new Map()}}
@@ -180,7 +183,7 @@ const N=4,DIRS=[[-1,-1],[-1,0],[-1,1],[0,-1],[0,1],[1,-1],[1,0],[1,1]];
 let trie=new Trie(),dictLoaded=false,results=[],activeIndex=-1;
 let lockedLetters = null;
 const el=id=>document.getElementById(id);
-const board=el('board'),statusPill=el('status'),gridInput=el('gridInput');
+const board=el('board'),statusPill=el('status'),gridInput=el('gridInput'),hiddenInput=el('hiddenInput');
 let lettersArr=Array(16).fill('');
 
 function createGrid(){
@@ -193,8 +196,26 @@ function createGrid(){
 }
 createGrid();
 
+function updateGrid(){[...gridInput.children].forEach((c,i)=>c.textContent=lettersArr[i]||'');}
+
+gridInput.addEventListener('click', e => {
+  if (e.target.classList.contains('gridCell')) {
+    hiddenInput.focus();
+  }
+});
+document.addEventListener('click', e => {
+  if (!e.target.classList.contains('gridCell')) {
+    hiddenInput.blur();
+  }
+});
+hiddenInput.addEventListener('input', e=>{
+  const val = e.target.value.toUpperCase().replace(/[^A-Z]/g,'');
+  lettersArr = val.split('').slice(0,16);
+  updateGrid();
+});
+
 document.addEventListener('keydown',e=>{
-  if(document.activeElement.tagName==='INPUT')return;
+  if(document.activeElement.tagName==='INPUT' && e.target!==hiddenInput)return;
   if(e.key.length===1&&/[a-zA-Z]/.test(e.key)){
     const idx=lettersArr.findIndex(ch=>!ch);
     if(idx!==-1)lettersArr[idx]=e.key.toUpperCase();
@@ -206,12 +227,10 @@ document.addEventListener('keydown',e=>{
   else if(e.key === 'ArrowLeft'){ el('prevBtn').click(); }
   updateGrid();
 });
+
 document.addEventListener('beforeinput', e => {
-  if (e.data && !/^[a-zA-Z]$/.test(e.data)) {
-    e.preventDefault();
-  }
+  if (e.data && !/^[a-zA-Z]$/.test(e.data)) e.preventDefault();
 });
-function updateGrid(){[...gridInput.children].forEach((c,i)=>c.textContent=lettersArr[i]||'');}
 
 async function autoLoadDict(){
   try{
@@ -296,6 +315,7 @@ el('prevBtn').onclick=()=>{if(results.length)setActive(activeIndex-1)};
 el('clearBtn').onclick=()=>{
   lettersArr=Array(16).fill('');
   updateGrid();
+  hiddenInput.value='';
   drawBoard(' '.repeat(16));
   results=[];activeIndex=-1;
   lockedLetters = null;
