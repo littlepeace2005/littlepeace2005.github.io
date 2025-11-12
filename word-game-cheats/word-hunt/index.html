@@ -286,7 +286,7 @@ el('runBtn').onclick=()=>{
   const letters=getLetters();
   if(letters.length!==16){alert('Please enter 16 letters.');return;}
   results=searchAll(letters);
-  if(!results.length){statusPill.textContent='No words found';drawBoard(letters);return;}
+  if(!results.length){statusPill.textContent='No word found';drawBoard(letters);return;}
   setActive(0);
 };
 el('nextBtn').onclick=()=>{if(results.length)setActive(activeIndex+1)};
