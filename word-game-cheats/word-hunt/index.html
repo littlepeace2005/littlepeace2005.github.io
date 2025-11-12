@@ -181,6 +181,7 @@ let trie=new Trie(),dictLoaded=false,results=[],activeIndex=-1;
 const el=id=>document.getElementById(id);
 const board=el('board'),statusPill=el('status'),gridInput=el('gridInput');
 let lettersArr=Array(16).fill('');
+let frozenLetters=' '.repeat(16); // 搜索时冻结的棋盘
 
 function createGrid(){
   gridInput.innerHTML='';
@@ -256,7 +257,7 @@ function searchAll(letters){
 }
 
 function node(tag,a){const e=document.createElementNS('http://www.w3.org/2000/svg',tag);for(const k in a)e.setAttribute(k,a[k]);return e;}
-function drawBoard(letters){
+function drawBoard(frozenLetters){
   board.innerHTML='';
   const size=520,pad=20,cell=(size-2*pad)/N;
   for(let r=0;r<N;r++)for(let c=0;c<N;c++){
@@ -278,22 +279,25 @@ function setActive(i){
   if(!results.length)return;activeIndex=(i+results.length)%results.length;
   const r=results[activeIndex];
   statusPill.textContent=`${activeIndex+1}/${results.length} · ${r.word}`;
-  drawBoard(getLetters());drawPath(r.coords);
+  drawBoard(frozenLetters);drawPath(r.coords);
 }
 
 el('runBtn').onclick=()=>{
   if(!dictLoaded){alert('Dictionary not loaded.');return;}
   const letters=getLetters();
+  frozenLetters = letters;
   if(letters.length!==16){alert('Please enter 16 letters.');return;}
   results=searchAll(letters);
-  if(!results.length){statusPill.textContent='No word found';drawBoard(letters);return;}
+  if(!results.length){statusPill.textContent='No word found';drawBoard(frozenLetters);return;}
   setActive(0);
 };
 el('nextBtn').onclick=()=>{if(results.length)setActive(activeIndex+1)};
 el('prevBtn').onclick=()=>{if(results.length)setActive(activeIndex-1)};
 el('clearBtn').onclick=()=>{
   lettersArr=Array(16).fill('');
-  updateGrid();
+  
+  frozenLetters = ' '.repeat(16);
+updateGrid();
   drawBoard(' '.repeat(16));
   results=[];activeIndex=-1;
   if(dictLoaded){statusPill.textContent='Cleared';}
