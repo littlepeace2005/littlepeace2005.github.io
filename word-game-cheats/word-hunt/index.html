@@ -178,6 +178,7 @@ class Trie{
 
 const N=4,DIRS=[[-1,-1],[-1,0],[-1,1],[0,-1],[0,1],[1,-1],[1,0],[1,1]];
 let trie=new Trie(),dictLoaded=false,results=[],activeIndex=-1;
+let lockedLetters = null;
 const el=id=>document.getElementById(id);
 const board=el('board'),statusPill=el('status'),gridInput=el('gridInput');
 let lettersArr=Array(16).fill('');
@@ -278,7 +279,7 @@ function setActive(i){
   if(!results.length)return;activeIndex=(i+results.length)%results.length;
   const r=results[activeIndex];
   statusPill.textContent=`${activeIndex+1}/${results.length} · ${r.word}`;
-  drawBoard(getLetters());drawPath(r.coords);
+  drawBoard(lockedLetters||getLetters());drawPath(r.coords);
 }
 
 el('runBtn').onclick=()=>{
@@ -287,6 +288,7 @@ el('runBtn').onclick=()=>{
   if(letters.length!==16){alert('Please enter 16 letters.');return;}
   results=searchAll(letters);
   if(!results.length){statusPill.textContent='No word found';drawBoard(letters);return;}
+  lockedLetters = getLetters();
   setActive(0);
 };
 el('nextBtn').onclick=()=>{if(results.length)setActive(activeIndex+1)};
@@ -296,6 +298,7 @@ el('clearBtn').onclick=()=>{
   updateGrid();
   drawBoard(' '.repeat(16));
   results=[];activeIndex=-1;
+  lockedLetters = null;
   if(dictLoaded){statusPill.textContent='Cleared';}
 };
 drawBoard(' '.repeat(16));
