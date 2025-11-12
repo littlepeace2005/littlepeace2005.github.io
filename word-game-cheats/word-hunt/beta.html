@@ -198,9 +198,13 @@ createGrid();
 
 function updateGrid(){[...gridInput.children].forEach((c,i)=>c.textContent=lettersArr[i]||'');}
 
-gridInput.addEventListener('click', ()=> hiddenInput.focus());
+gridInput.addEventListener('click', e => {
+  if (e.target.classList.contains('gridCell')) {
+    hiddenInput.focus();
+  }
+});
 document.addEventListener('click', e => {
-  if (!gridInput.contains(e.target)) {
+  if (!e.target.classList.contains('gridCell')) {
     hiddenInput.blur();
   }
 });
