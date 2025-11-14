@@ -927,7 +927,7 @@ el('clearBtn').onclick = () => {
 /* ========= 字典加载 ========= */
 async function loadDict() {
   try {
-    const res = await fetch('./scrabble_words.txt');
+    const res = await fetch('../scrabble_words.txt');
     if (!res.ok) throw new Error('scrabble_words.txt not found');
     const text = await res.text();
     const words = [];
