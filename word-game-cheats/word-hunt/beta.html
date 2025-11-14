@@ -91,6 +91,11 @@
     background:#1a2736;color:var(--ink);
     border:1px solid #2a3a4f;box-shadow:none;
   }
+  .btn.small {
+    font-size:12px;
+    padding:6px 8px;
+    margin-top:6px;
+  }
   .btn:disabled {
     opacity:.5;cursor:not-allowed;box-shadow:none;
   }
@@ -113,6 +118,7 @@
   .legend i { display:inline-block;width:9px;height:9px;border-radius:50%; }
   .legend .word { background:var(--accent); }
   .legend .moved { background:var(--hit); }
+  .legend .ghost { background:rgba(111,211,255,.3); }
 
   .gridCard {
     flex:2 1 520px;
@@ -135,7 +141,7 @@
   .bottomHint { color:var(--muted);font-size:13.5px;margin-top:6px; }
 
   .steps {
-    max-height:180px;
+    max-height:190px;
     overflow:auto;
     padding:8px 10px;
     border-radius:10px;
@@ -161,7 +167,7 @@
     }
     .svgWrap{
       flex:unset;
-      aspect-ratio:1/1;
+      aspect-ratio:8/9;
       width:100%;
       min-height:280px;
       max-height:60vh;
@@ -184,7 +190,7 @@
   <div class="row">
     <section class="card controls">
       <div>
-        <label>8×8 棋盘输入（空格 = 没有字母）</label>
+        <label>8×9 棋盘输入（8 列 × 9 行，空格 = 没有字母）</label>
         <div class="gridInput" id="gridInput"></div>
       </div>
 
@@ -206,7 +212,8 @@
         <div class="pill" id="status">Loading dictionary...</div>
         <div class="legend">
           <i class="word"></i><span>单词所在格</span>
-          <i class="moved"></i><span>被移动的块</span>
+          <i class="moved"></i><span>移动后格</span>
+          <i class="ghost"></i><span>上一步位置</span>
         </div>
       </div>
 
@@ -225,11 +232,13 @@
 </div>
 
 <script>
-/* ========= 基本状态 ========= */
-const N = 8;
+/* ========= 棋盘尺寸：8 列 × 9 行 ========= */
+const W = 8;   // columns
+const H = 9;   // rows
+
 const el = id => document.getElementById(id);
 
-let lettersArr = Array(N * N).fill('');   // 每格字母（大写或空）
+let lettersArr = Array(W * H).fill('');   // 一维：行优先
 let cursorIndex = 0;
 
 let dict = [];
@@ -247,7 +256,7 @@ const solutionLabel = el('solutionLabel');
 /* ========= 初始化输入网格 ========= */
 function createGrid() {
   gridInput.innerHTML = '';
-  for (let i = 0; i < N * N; i++) {
+  for (let i = 0; i < W * H; i++) {
     const cell = document.createElement('div');
     cell.className = 'gridCell empty';
     cell.dataset.index = i;
@@ -273,11 +282,11 @@ function updateGrid() {
 
 /* ========= 键盘输入逻辑 ========= */
 function moveCursor(dr, dc) {
-  let r = Math.floor(cursorIndex / N);
-  let c = cursorIndex % N;
-  r = Math.min(N - 1, Math.max(0, r + dr));
-  c = Math.min(N - 1, Math.max(0, c + dc));
-  cursorIndex = r * N + c;
+  let r = Math.floor(cursorIndex / W);
+  let c = cursorIndex % W;
+  r = Math.min(H - 1, Math.max(0, r + dr));
+  c = Math.min(W - 1, Math.max(0, c + dc));
+  cursorIndex = r * W + c;
   updateGrid();
 }
 
@@ -350,13 +359,13 @@ document.addEventListener('keydown', (e) => {
   }
 });
 
-/* ========= 读取棋盘为二维数组 ========= */
+/* ========= 读当前棋盘到二维数组 ========= */
 function getGridLetters2D() {
   const grid = [];
-  for (let r = 0; r < N; r++) {
+  for (let r = 0; r < H; r++) {
     const row = [];
-    for (let c = 0; c < N; c++) {
-      const ch = lettersArr[r * N + c] || '';
+    for (let c = 0; c < W; c++) {
+      const ch = lettersArr[r * W + c] || '';
       row.push(ch);
     }
     grid.push(row);
@@ -364,26 +373,17 @@ function getGridLetters2D() {
   return grid;
 }
 
-/* ========= 识别 Word Bites 方块 ========= */
-/*
-  规则：
-  - 用 上下左右 连通的字母格组成一个块
-  - 每个块最多 2 格，否则报错（Word Bites 方块为 1 或 2 字母）
-  - 若两格不在同一行/同一列（L 形）则报错
-  - 对于双格：
-    - 水平方向：左→右
-    - 垂直方向：上→下
-*/
+/* ========= 识别 Word Bites 方块（连通块 ≤2 且直线） ========= */
 function buildBlocksFromGrid(grid) {
-  const visited = Array.from({ length: N }, () => Array(N).fill(false));
+  const visited = Array.from({ length: H }, () => Array(W).fill(false));
   const blocks = [];
   const blocksByLetters = new Map();
   let totalLetters = 0;
 
-  const inBounds = (r, c) => r >= 0 && r < N && c >= 0 && c < N;
+  const inBounds = (r, c) => r >= 0 && r < H && c >= 0 && c < W;
 
-  for (let r = 0; r < N; r++) {
-    for (let c = 0; c < N; c++) {
+  for (let r = 0; r < H; r++) {
+    for (let c = 0; c < W; c++) {
       if (visited[r][c]) continue;
       const ch = grid[r][c];
       if (!ch) continue;
@@ -436,7 +436,7 @@ function buildBlocksFromGrid(grid) {
       const block = {
         id: blocks.length,
         letters,
-        orientation,
+        orientation,   // 'H' / 'V' / 'S'
         cells: sortedCells
       };
       blocks.push(block);
@@ -461,11 +461,12 @@ function computeLetterCounts(blocks) {
   return counts;
 }
 
-/* ========= 判断一个单词能否由这些方块拼成（只考虑字母 & 字段，不考虑位置） ========= */
+/* ========= 用方块多重集合判断一个单词是否可拼（不看位置） ========= */
 function findSegmentation(word, tileTypes, totalLetters, letterCounts) {
   const w = word.toLowerCase();
   if (w.length < 3) return null;
-  if (w.length > totalLetters) return null;
+  const maxLen = Math.max(W, H);
+  if (w.length > maxLen) return null;
 
   const localCounts = {};
   for (const ch of w) {
@@ -507,22 +508,22 @@ function findSegmentation(word, tileTypes, totalLetters, letterCounts) {
   return resIndices.slice();
 }
 
-/* ========= 为一个单词规划“最少移动次数”的摆法 ========= */
-/*
-  输入：
-    word: 字符串（已确认可由方块拼出）
-    segments: [tileStr1, tileStr2, ...]，这些 tile 串拼接起来就是 word
-*/
+/* ========= 规划一个单词的最优摆放（最少移动块数） ========= */
 function planWord(word, segments, blocks, blocksByLetters) {
   const segCount = segments.length;
   const L = word.length;
-  if (L > N) return null;
+  const maxLen = Math.max(W, H);
+  if (L > maxLen) return null;
 
   let best = null;
-  const sizeCache = new Map();
+  const blockCellsSortedCache = {};
 
   function tryPlacement(dir, fixedIndex) {
-    const maxStart = N - L;
+    // dir='H' 时最多长度 W；dir='V' 时最多长度 H
+    const lineLen = dir === 'H' ? W : H;
+    if (L > lineLen) return;
+    const maxStart = lineLen - L;
+
     for (let start = 0; start <= maxStart; start++) {
       const segmentCells = [];
       let offset = 0;
@@ -539,9 +540,8 @@ function planWord(word, segments, blocks, blocksByLetters) {
         offset += segLen;
       }
 
-      // 构建“segment -> 可以保持不动的 block” 的邻接关系
+      // seg -> 可以保持不动的 block
       const segToBlocks = segmentCells.map(() => []);
-      const blockCellsSortedCache = {};
 
       for (let si = 0; si < segCount; si++) {
         const segStr = segments[si];
@@ -551,6 +551,7 @@ function planWord(word, segments, blocks, blocksByLetters) {
 
         for (const bId of blockIds) {
           const b = blocks[bId];
+          // 横块不能竖，竖块不能横；单字母块都可以
           if (dir === 'H' && b.orientation === 'V') continue;
           if (dir === 'V' && b.orientation === 'H') continue;
 
@@ -565,7 +566,7 @@ function planWord(word, segments, blocks, blocksByLetters) {
         }
       }
 
-      // 最大匹配：尽量多的 segment 可以不用移动
+      // 尽量多的 segment 用“不动块”
       const matchBlockToSeg = {};
       let stationaryCount = 0;
 
@@ -611,22 +612,38 @@ function planWord(word, segments, blocks, blocksByLetters) {
     }
   }
 
-  for (let row = 0; row < N; row++) tryPlacement('H', row);
-  for (let col = 0; col < N; col++) tryPlacement('V', col);
+  for (let row = 0; row < H; row++) tryPlacement('H', row);
+  for (let col = 0; col < W; col++) tryPlacement('V', col);
 
   return best;
 }
 
-/* ========= 生成一个完整方案对象（含移动步骤 & 最终棋盘） ========= */
+/* ========= Word Hunt 风格得分（近似 Word Bites） ========= */
+function scoreForWordLength(len) {
+  // 来自 Word Hunt：3→100, 4→400, 5→800, 6→1400, 7→1800, 8→2200
+  // 9 字母粗略加一档
+  const table = {
+    3: 100,
+    4: 400,
+    5: 800,
+    6: 1400,
+    7: 1800,
+    8: 2200,
+    9: 2600
+  };
+  return table[len] || 0;
+}
+
+/* ========= 构造完整方案（包含移动步骤 & 最终棋盘） ========= */
 function buildSolution(word, segments, bestPlan, blocks, blocksByLetters, initialGrid) {
   const segCount = segments.length;
-  const segAssignedBlock = bestPlan.segAssignedBlock; // 部分 segment 已经分配了“原地不动”的块
+  const segAssignedBlock = bestPlan.segAssignedBlock;
 
   const usedBlockIds = new Set();
   const stationaryBlocks = new Set();
   const segBlockId = Array(segCount).fill(null);
 
-  // 已经原位的块
+  // 已在目标位置的块
   for (let si = 0; si < segCount; si++) {
     const bId = segAssignedBlock[si];
     if (bId != null) {
@@ -636,7 +653,7 @@ function buildSolution(word, segments, bestPlan, blocks, blocksByLetters, initia
     }
   }
 
-  // 为剩余 segment 分配需要移动的块（同字母串即可）
+  // 为剩余 segment 分配移动块
   const availableByStr = new Map();
   blocksByLetters.forEach((ids, str) => {
     const remaining = ids.filter(id => !usedBlockIds.has(id));
@@ -655,9 +672,10 @@ function buildSolution(word, segments, bestPlan, blocks, blocksByLetters, initia
 
   const steps = [];
   const wordCells = [];
+
   for (let si = 0; si < segCount; si++) {
     const bId = segBlockId[si];
-    if (bId == null) continue; // 理论上不会
+    if (bId == null) continue;
     const b = blocks[bId];
     const targetCells = bestPlan.segmentCells[si];
     const fromCells = b.cells;
@@ -672,7 +690,7 @@ function buildSolution(word, segments, bestPlan, blocks, blocksByLetters, initia
     for (const cell of targetCells) wordCells.push({ r: cell.r, c: cell.c });
   }
 
-  // 构造最终棋盘：先复制，再把参与的块清空并放到目标位置
+  // 构造最终棋盘
   const finalGrid = initialGrid.map(row => row.slice());
 
   usedBlockIds.forEach(bId => {
@@ -694,6 +712,9 @@ function buildSolution(word, segments, bestPlan, blocks, blocksByLetters, initia
     }
   }
 
+  const score = scoreForWordLength(word.length);
+  const eff = score / (bestPlan.moves + 1);
+
   return {
     word,
     moves: bestPlan.moves,
@@ -702,14 +723,20 @@ function buildSolution(word, segments, bestPlan, blocks, blocksByLetters, initia
     start: bestPlan.start,
     steps,
     finalGrid,
-    wordCells
+    wordCells,
+    score,
+    efficiency: eff
   };
 }
 
-/* ========= 画棋盘 ========= */
-function drawBoardWithSolution(grid, wordCells, movedCellsSet) {
+/* ========= 画棋盘 + 幽灵块 + 箭头 ========= */
+function drawBoardWithSolution(grid, wordCells, movedCellsSet, ghostCellsSet, arrows) {
   boardSvg.innerHTML = '';
-  const size = 520, pad = 20, cellSize = (size - 2 * pad) / N;
+
+  const size = 520;
+  const pad = 20;
+  const cellWidth = (size - 2 * pad) / W;
+  const cellHeight = (size - 2 * pad) / H;
 
   const highlightSet = new Set();
   if (wordCells) {
@@ -718,10 +745,11 @@ function drawBoardWithSolution(grid, wordCells, movedCellsSet) {
     }
   }
 
-  for (let r = 0; r < N; r++) {
-    for (let c = 0; c < N; c++) {
-      const x = pad + c * cellSize;
-      const y = pad + r * cellSize;
+  // 底层格子背景
+  for (let r = 0; r < H; r++) {
+    for (let c = 0; c < W; c++) {
+      const x = pad + c * cellWidth;
+      const y = pad + r * cellHeight;
       const key = r + ',' + c;
 
       let stroke = '#1e2b3b';
@@ -737,8 +765,8 @@ function drawBoardWithSolution(grid, wordCells, movedCellsSet) {
       const rect = document.createElementNS('http://www.w3.org/2000/svg','rect');
       rect.setAttribute('x', x);
       rect.setAttribute('y', y);
-      rect.setAttribute('width', cellSize - 2);
-      rect.setAttribute('height', cellSize - 2);
+      rect.setAttribute('width', cellWidth - 2);
+      rect.setAttribute('height', cellHeight - 2);
       rect.setAttribute('rx', 10);
       rect.setAttribute('ry', 10);
       rect.setAttribute('fill', fill);
@@ -747,12 +775,35 @@ function drawBoardWithSolution(grid, wordCells, movedCellsSet) {
     }
   }
 
-  for (let r = 0; r < N; r++) {
-    for (let c = 0; c < N; c++) {
+  // 幽灵块（上一位置）
+  if (ghostCellsSet && ghostCellsSet.size) {
+    ghostCellsSet.forEach(key => {
+      const [rStr, cStr] = key.split(',');
+      const r = Number(rStr), c = Number(cStr);
+      const x = pad + c * cellWidth;
+      const y = pad + r * cellHeight;
+
+      const rect = document.createElementNS('http://www.w3.org/2000/svg','rect');
+      rect.setAttribute('x', x + 3);
+      rect.setAttribute('y', y + 3);
+      rect.setAttribute('width', cellWidth - 8);
+      rect.setAttribute('height', cellHeight - 8);
+      rect.setAttribute('rx', 8);
+      rect.setAttribute('ry', 8);
+      rect.setAttribute('fill', 'rgba(111,211,255,0.08)');
+      rect.setAttribute('stroke', 'rgba(111,211,255,0.5)');
+      rect.setAttribute('stroke-dasharray', '4 3');
+      boardSvg.appendChild(rect);
+    });
+  }
+
+  // 字母
+  for (let r = 0; r < H; r++) {
+    for (let c = 0; c < W; c++) {
       const ch = grid[r][c] || '';
       if (!ch) continue;
-      const x = pad + c * cellSize + cellSize / 2;
-      const y = pad + r * cellSize + cellSize / 2 + 7;
+      const x = pad + c * cellWidth + cellWidth / 2;
+      const y = pad + r * cellHeight + cellHeight / 2 + 7;
       const text = document.createElementNS('http://www.w3.org/2000/svg','text');
       text.setAttribute('x', x);
       text.setAttribute('y', y);
@@ -764,13 +815,50 @@ function drawBoardWithSolution(grid, wordCells, movedCellsSet) {
       boardSvg.appendChild(text);
     }
   }
+
+  // 箭头（从旧中心 → 新中心）
+  if (arrows && arrows.length) {
+    // 定义箭头头部 marker
+    const defs = document.createElementNS('http://www.w3.org/2000/svg','defs');
+    const marker = document.createElementNS('http://www.w3.org/2000/svg','marker');
+    marker.setAttribute('id','arrowhead');
+    marker.setAttribute('markerWidth','8');
+    marker.setAttribute('markerHeight','8');
+    marker.setAttribute('refX','4');
+    marker.setAttribute('refY','3');
+    marker.setAttribute('orient','auto');
+    const path = document.createElementNS('http://www.w3.org/2000/svg','path');
+    path.setAttribute('d','M0,0 L0,6 L6,3 z');
+    path.setAttribute('fill','rgba(111,211,255,0.7)');
+    marker.appendChild(path);
+    defs.appendChild(marker);
+    boardSvg.appendChild(defs);
+
+    for (const ar of arrows) {
+      const fromX = pad + (ar.from.c + 0.5) * cellWidth;
+      const fromY = pad + (ar.from.r + 0.5) * cellHeight;
+      const toX = pad + (ar.to.c + 0.5) * cellWidth;
+      const toY = pad + (ar.to.r + 0.5) * cellHeight;
+
+      const line = document.createElementNS('http://www.w3.org/2000/svg','line');
+      line.setAttribute('x1', fromX);
+      line.setAttribute('y1', fromY);
+      line.setAttribute('x2', toX);
+      line.setAttribute('y2', toY);
+      line.setAttribute('stroke','rgba(111,211,255,0.7)');
+      line.setAttribute('stroke-width','2');
+      line.setAttribute('stroke-dasharray','5 4');
+      line.setAttribute('marker-end','url(#arrowhead)');
+      boardSvg.appendChild(line);
+    }
+  }
 }
 
-/* ========= 更新步骤文本 ========= */
+/* ========= 更新步骤说明 ========= */
 function renderSteps(solution) {
   stepsBox.innerHTML = '';
   const h3 = document.createElement('h3');
-  h3.textContent = `单词：${solution.word.toUpperCase()}（移动 ${solution.moves} 块）`;
+  h3.textContent = `单词：${solution.word.toUpperCase()} （得分 ${solution.score}，移动 ${solution.moves} 块，效率 ${solution.efficiency.toFixed(2)}）`;
   stepsBox.appendChild(h3);
 
   const info = document.createElement('div');
@@ -778,13 +866,6 @@ function renderSteps(solution) {
   const lineIndex = solution.fixedIndex + 1;
   info.textContent = `摆放方向：${dirText} · 第 ${lineIndex} 行/列 · 从第 ${solution.start + 1} 格开始`;
   stepsBox.appendChild(info);
-
-  if (!solution.steps.length) {
-    const p = document.createElement('div');
-    p.textContent = '（没有使用任何块？这不应该发生…）';
-    stepsBox.appendChild(p);
-    return;
-  }
 
   const ulTitle = document.createElement('div');
   ulTitle.style.marginTop = '4px';
@@ -804,6 +885,12 @@ function renderSteps(solution) {
     ol.appendChild(li);
   }
   stepsBox.appendChild(ol);
+
+  const applyBtn = document.createElement('button');
+  applyBtn.className = 'btn small';
+  applyBtn.textContent = 'Apply this word to board';
+  applyBtn.onclick = applyActiveSolutionToBoard;
+  stepsBox.appendChild(applyBtn);
 }
 
 /* ========= 显示某个方案 ========= */
@@ -811,26 +898,52 @@ function setActiveSolution(idx) {
   if (!solutions.length) {
     activeSolutionIndex = -1;
     solutionLabel.textContent = '0 / 0';
-    drawBoardWithSolution(getGridLetters2D(), [], null);
+    drawBoardWithSolution(getGridLetters2D(), [], null, null, null);
     stepsBox.innerHTML = '<h3>步骤 / Steps</h3><div>没有方案，请检查棋盘或字典。</div>';
     return;
   }
   activeSolutionIndex = (idx + solutions.length) % solutions.length;
   const s = solutions[activeSolutionIndex];
 
-  // 哪些格子使用了“被移动的块”
+  // 被移动块的新位置
   const movedCellsSet = new Set();
+  const ghostCellsSet = new Set();
+  const arrows = [];
+
+  function centerCell(cells) {
+    let sumR = 0, sumC = 0;
+    for (const p of cells) {
+      sumR += p.r; sumC += p.c;
+    }
+    const n = cells.length || 1;
+    // 平均位置四舍五入到最近格子
+    return {
+      r: sumR / n,
+      c: sumC / n
+    };
+  }
+
   for (const step of s.steps) {
-    if (!step.moved) continue;
-    for (const cell of step.to) {
-      movedCellsSet.add(cell.r + ',' + cell.c);
+    if (step.moved) {
+      for (const cell of step.to) {
+        movedCellsSet.add(cell.r + ',' + cell.c);
+      }
+      for (const cell of step.from) {
+        ghostCellsSet.add(cell.r + ',' + cell.c);
+      }
+      const fromCenter = centerCell(step.from);
+      const toCenter = centerCell(step.to);
+      arrows.push({
+        from: { r: fromCenter.r, c: fromCenter.c },
+        to: { r: toCenter.r, c: toCenter.c }
+      });
     }
   }
 
-  drawBoardWithSolution(s.finalGrid, s.wordCells, movedCellsSet);
+  drawBoardWithSolution(s.finalGrid, s.wordCells, movedCellsSet, ghostCellsSet, arrows);
   renderSteps(s);
   solutionLabel.textContent = `${activeSolutionIndex + 1} / ${solutions.length}`;
-  statusPill.textContent = `找到 ${solutions.length} 个单词 · 当前：${s.word.toUpperCase()} · 移动 ${s.moves} 块`;
+  statusPill.textContent = `Found ${solutions.length} words · 当前：${s.word.toUpperCase()} · ${s.score} 分 · 移动 ${s.moves} 块`;
   statusPill.classList.remove('bad');
 }
 
@@ -846,6 +959,32 @@ function prevSolution() {
 
 el('nextBtn').onclick = nextSolution;
 el('prevBtn').onclick = prevSolution;
+
+/* ========= 将当前方案应用到棋盘（更新块位置） ========= */
+function applyActiveSolutionToBoard() {
+  if (activeSolutionIndex < 0 || !solutions.length) return;
+  const s = solutions[activeSolutionIndex];
+  const grid = s.finalGrid;
+  // 更新 lettersArr
+  const arr = [];
+  for (let r = 0; r < H; r++) {
+    for (let c = 0; c < W; c++) {
+      arr.push(grid[r][c] || '');
+    }
+  }
+  lettersArr = arr;
+  cursorIndex = 0;
+  updateGrid();
+  drawBoardWithSolution(getGridLetters2D(), [], null, null, null);
+  solutions = [];
+  activeSolutionIndex = -1;
+  solutionLabel.textContent = '0 / 0';
+  stepsBox.innerHTML = '<h3>步骤 / Steps</h3><div>已将当前单词应用到棋盘，请按 Enter 重新搜索下一步。</div>';
+  if (dictLoaded) {
+    statusPill.textContent = 'Board updated · Dictionary loaded';
+    statusPill.classList.remove('bad');
+  }
+}
 
 /* ========= 搜索主流程 ========= */
 async function runSearch() {
@@ -872,8 +1011,10 @@ async function runSearch() {
     });
 
     const candidates = [];
+    const maxWordLen = Math.max(W, H);
+
     for (const w of dict) {
-      if (w.length < 3 || w.length > N) continue;
+      if (w.length < 3 || w.length > maxWordLen) continue;
       const segIndices = findSegmentation(w, tileTypes, totalLetters, letterCounts);
       if (!segIndices) continue;
       const segments = segIndices.map(i => tileTypes[i].str);
@@ -891,10 +1032,11 @@ async function runSearch() {
       return;
     }
 
-    // 排序：先按移动块数升序，再按单词长度降序，再按字典顺序
+    // 排序：先看效率（score/(moves+1)），再看步数少，再看得分高
     candidates.sort((a, b) => {
+      if (b.efficiency !== a.efficiency) return b.efficiency - a.efficiency;
       if (a.moves !== b.moves) return a.moves - b.moves;
-      if (b.word.length !== a.word.length) return b.word.length - a.word.length;
+      if (b.score !== a.score) return b.score - a.score;
       return a.word.localeCompare(b.word);
     });
 
@@ -910,10 +1052,10 @@ async function runSearch() {
 /* ========= 按钮事件 ========= */
 el('runBtn').onclick = runSearch;
 el('clearBtn').onclick = () => {
-  lettersArr = Array(N * N).fill('');
+  lettersArr = Array(W * H).fill('');
   cursorIndex = 0;
   updateGrid();
-  drawBoardWithSolution(getGridLetters2D(), [], null);
+  drawBoardWithSolution(getGridLetters2D(), [], null, null, null);
   solutions = [];
   activeSolutionIndex = -1;
   solutionLabel.textContent = '0 / 0';
@@ -931,11 +1073,12 @@ async function loadDict() {
     if (!res.ok) throw new Error('scrabble_words.txt not found');
     const text = await res.text();
     const words = [];
+    const maxWordLen = Math.max(W, H);
     for (const line of text.split(/\r?\n/)) {
       const w = line.trim().toLowerCase();
       if (!w) continue;
       if (!/^[a-z]+$/.test(w)) continue;
-      if (w.length < 3 || w.length > N) continue; // Word Bites 单词长度至多 8（1 行）
+      if (w.length < 3 || w.length > maxWordLen) continue;
       words.push(w);
     }
     dict = words;
@@ -950,7 +1093,7 @@ async function loadDict() {
 
 /* ========= 启动 ========= */
 updateGrid();
-drawBoardWithSolution(getGridLetters2D(), [], null);
+drawBoardWithSolution(getGridLetters2D(), [], null, null, null);
 loadDict();
 </script>
 </body>
