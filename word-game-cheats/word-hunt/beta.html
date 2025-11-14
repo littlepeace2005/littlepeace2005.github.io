@@ -3,10 +3,11 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Word Hunt Helper</title>
+<title>Word Bites Helper</title>
 <style>
   :root {
-    --bg:#0b0f14; --panel:#121821; --muted:#8aa0b4; --ink:#dbe7f4; --accent:#6fd3ff; --hit:#60ffa7;
+    --bg:#0b0f14; --panel:#121821; --muted:#8aa0b4; --ink:#dbe7f4;
+    --accent:#6fd3ff; --hit:#60ffa7; --danger:#ff6b81;
   }
   * { box-sizing:border-box; }
   html, body { height:100%; }
@@ -23,7 +24,7 @@
     padding:20px;
   }
   .app {
-    width:min(900px,100%);
+    width:min(1000px,100%);
     display:flex;
     flex-direction:column;
     gap:14px;
@@ -34,13 +35,13 @@
   .hint { color:var(--muted); font-size:13.5px; }
   .kbd {
     display:inline-grid; place-items:center;
-    padding:.15rem .4rem; border-radius:5px;
+    padding:.1rem .4rem; border-radius:5px;
     background:#0e1620; border:1px solid #223042;
     color:#c9d8e6; font-size:11px;
   }
 
   .row { display:flex; gap:14px; align-items:stretch; flex:1; min-height:0; }
-  @media (max-width:720px){ .row{flex-direction:column;} }
+  @media (max-width:820px){ .row{flex-direction:column;} }
 
   .card {
     background:var(--panel);
@@ -49,29 +50,38 @@
     padding:14px;
     box-shadow:0 6px 20px rgba(0,0,0,.35);
     display:flex;flex-direction:column;justify-content:space-between;
+    min-height:0;
   }
 
   .controls {
-    flex:0 0 260px;
+    flex:0 0 290px;
     display:flex;flex-direction:column;justify-content:space-between;
   }
 
   label { font-size:13.5px;color:var(--muted);display:block;margin-bottom:6px; }
   .gridInput {
     display:grid;
-    grid-template-columns:repeat(4,52px);
-    grid-auto-rows:52px;
+    grid-template-columns:repeat(8,38px);
+    grid-auto-rows:38px;
     justify-content:start;
-    column-gap:4px; row-gap:6px; margin-top:4px;
+    column-gap:4px; row-gap:4px; margin-top:4px;
   }
   .gridCell {
-    width:52px;height:52px;display:flex;align-items:center;justify-content:center;
+    width:38px;height:38px;display:flex;align-items:center;justify-content:center;
     border-radius:8px;background:#0f141c;border:1px solid #203040;
-    font-size:24px;font-weight:700;text-transform:uppercase;
+    font-size:20px;font-weight:700;text-transform:uppercase;
+    cursor:pointer;
+  }
+  .gridCell.cursor {
+    border-color:var(--accent);
+    box-shadow:0 0 0 1px rgba(111,211,255,.6);
+  }
+  .gridCell.empty {
+    color:#364760;
   }
 
   .btn {
-    cursor:pointer;border:0;padding:10px 12px;border-radius:10px;
+    cursor:pointer;border:0;padding:9px 10px;border-radius:10px;
     font-weight:650;font-size:14px;color:#03111a;
     background:linear-gradient(180deg,#89e3ff,#48c7ff);
     box-shadow:0 6px 18px rgba(64,200,255,.35);
@@ -81,6 +91,9 @@
     background:#1a2736;color:var(--ink);
     border:1px solid #2a3a4f;box-shadow:none;
   }
+  .btn:disabled {
+    opacity:.5;cursor:not-allowed;box-shadow:none;
+  }
 
   .btnGrid {
     display:grid;
@@ -89,239 +102,856 @@
     margin-top:12px;
   }
 
-  .pill { padding:.1rem .5rem;border:1px solid #254057;
+  .pill {
+    padding:.1rem .6rem;border:1px solid #254057;
     border-radius:999px;color:#a9c6dc;font-size:12px;
+    white-space:nowrap;
   }
-  .legend { display:flex;gap:8px;align-items:center;font-size:12px; }
+  .pill.bad { border-color:rgba(255,107,129,.7);color:#ffd1d9; }
+
+  .legend { display:flex;gap:8px;align-items:center;font-size:12px;color:var(--muted); }
   .legend i { display:inline-block;width:9px;height:9px;border-radius:50%; }
-  .legend .node { background:var(--hit); }
-  .legend .edge { width:14px;height:2px;border-radius:2px;background:var(--accent); }
+  .legend .word { background:var(--accent); }
+  .legend .moved { background:var(--hit); }
 
   .gridCard {
     flex:2 1 520px;
     display:flex;flex-direction:column;justify-content:space-between;
     min-height:0;
+    gap:8px;
   }
   .svgWrap {
     flex:1;
     width:100%;
-    min-height:300px;
+    min-height:320px;
     border-radius:12px;
     background:#0b1118;
     border:1px solid #1a2431;
     overflow:hidden;
   }
   svg { width:100%;height:100%;display:block; }
-  .footer { color:#8ea7bb;font-size:13.5px;margin-top:8px;text-align:center; }
 
+  .footer { color:#8ea7bb;font-size:13.5px;margin-top:4px;text-align:center; }
   .bottomHint { color:var(--muted);font-size:13.5px;margin-top:6px; }
 
-  @media (max-width:720px){
+  .steps {
+    max-height:180px;
+    overflow:auto;
+    padding:8px 10px;
+    border-radius:10px;
+    background:#0c131d;
+    border:1px solid #1b2838;
+    font-size:13px;
+  }
+  .steps h3 {
+    margin:0 0 4px 0;
+    font-size:13px;
+    color:#a9c6dc;
+  }
+  .steps ol {
+    margin:4px 0 0 18px;
+    padding:0;
+  }
+  .steps li { margin-bottom:2px; }
+
+  @media (max-width:820px){
+    .controls{flex:0 0 auto;}
     .gridCard{
-      flex: 0 0 auto;
+      flex:0 0 auto;
     }
     .svgWrap{
-      flex: unset;
-      aspect-ratio: 1 / 1;
-      width: 100%;
-      height: auto;
-      min-height: 320px;
-      max-height: 70vh;
+      flex:unset;
+      aspect-ratio:1/1;
+      width:100%;
+      min-height:280px;
+      max-height:60vh;
     }
   }
 </style>
 </head>
 <body>
-  <div class="app">
-    <header>
-      <div class="title">Word Hunt Helper</div>
-      <div class="hint">Press <span class="kbd">Enter</span> to search</div>
-    </header>
-
-    <div class="row">
-      <section class="card controls">
-        <div>
-          <label>Enter 16 letters (row by row):</label>
-          <div class="gridInput" id="gridInput"></div>
-        </div>
-
-        <div style="display:flex;flex-direction:column;margin-top:14px;">
-          <div class="btnGrid">
-            <button id="runBtn" class="btn">Search</button>
-            <button id="clearBtn" class="btn secondary">Clear</button>
-            <button id="prevBtn" class="btn secondary">⏮ Prev</button>
-            <button id="nextBtn" class="btn secondary">Next ⏭</button>
-          </div>
-          <div class="bottomHint">Up to 64 words.</div>
-        </div>
-      </section>
-
-      <section class="card gridCard">
-        <div style="display:flex;align-items:center;justify-content:space-between;color:var(--muted);margin-bottom:6px;">
-          <div class="pill" id="status">Loading dictionary...</div>
-          <div class="legend"><i class="node"></i><span>Starting node</span><span class="edge"></span><span>Path</span></div>
-        </div>
-        <div class="svgWrap"><svg id="board" viewBox="0 0 520 520" preserveAspectRatio="xMidYMid meet"></svg></div>
-        <div class="footer">Use <span class="kbd">←</span> / <span class="kbd">→</span> to switch words.</div>
-      </section>
+<div class="app">
+  <header>
+    <div class="title">Word Bites Helper</div>
+    <div class="hint">
+      输入：<span class="kbd">↑↓←→</span> 移动光标，
+      字母/空格填格子，
+      <span class="kbd">Enter</span> 搜索，
+      <span class="kbd">Ctrl</span>+<span class="kbd">←/→</span> 换方案
     </div>
-  </div>
+  </header>
 
-  <input id="hiddenInput" type="text" inputmode="latin" maxlength="16"
-    style="position:absolute;opacity:0;pointer-events:none;" />
+  <div class="row">
+    <section class="card controls">
+      <div>
+        <label>8×8 棋盘输入（空格 = 没有字母）</label>
+        <div class="gridInput" id="gridInput"></div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;margin-top:14px;">
+        <div class="btnGrid">
+          <button id="runBtn" class="btn">Search</button>
+          <button id="clearBtn" class="btn secondary">Clear</button>
+          <button id="prevBtn" class="btn secondary">⏮ Prev</button>
+          <button id="nextBtn" class="btn secondary">Next ⏭</button>
+        </div>
+        <div class="bottomHint">
+          请将 <code>scrabble_words.txt</code> 放在同目录下，页面加载时自动读取字典。
+        </div>
+      </div>
+    </section>
+
+    <section class="card gridCard">
+      <div style="display:flex;align-items:center;justify-content:space-between;color:var(--muted);margin-bottom:4px;gap:8px;">
+        <div class="pill" id="status">Loading dictionary...</div>
+        <div class="legend">
+          <i class="word"></i><span>单词所在格</span>
+          <i class="moved"></i><span>被移动的块</span>
+        </div>
+      </div>
+
+      <div class="svgWrap"><svg id="board" viewBox="0 0 520 520" preserveAspectRatio="xMidYMid meet"></svg></div>
+
+      <div class="steps" id="steps">
+        <h3>步骤 / Steps</h3>
+        <div>输入棋盘并按 Enter 搜索方案。</div>
+      </div>
+
+      <div class="footer">
+        当前方案：<span id="solutionLabel">0 / 0</span>
+      </div>
+    </section>
+  </div>
+</div>
 
 <script>
-class TrieNode{constructor(){this.isWord=false;this.next=new Map()}}
-class Trie{
-  constructor(){this.root=new TrieNode()}
-  insert(w){let n=this.root;for(let ch of w.toLowerCase()){if(!n.next.has(ch))n.next.set(ch,new TrieNode());n=n.next.get(ch)}n.isWord=true}
-  startsWith(p){let n=this.root;for(let ch of p.toLowerCase()){if(!n.next.has(ch))return false;n=n.next.get(ch)}return true}
-  search(w){let n=this.root;for(let ch of w.toLowerCase()){if(!n.next.has(ch))return false;n=n.next.get(ch)}return n.isWord}
-}
+/* ========= 基本状态 ========= */
+const N = 8;
+const el = id => document.getElementById(id);
 
-const N=4,DIRS=[[-1,-1],[-1,0],[-1,1],[0,-1],[0,1],[1,-1],[1,0],[1,1]];
-let trie=new Trie(),dictLoaded=false,results=[],activeIndex=-1;
-let lockedLetters = null;
-const el=id=>document.getElementById(id);
-const board=el('board'),statusPill=el('status'),gridInput=el('gridInput'),hiddenInput=el('hiddenInput');
-let lettersArr=Array(16).fill('');
+let lettersArr = Array(N * N).fill('');   // 每格字母（大写或空）
+let cursorIndex = 0;
 
-function createGrid(){
-  gridInput.innerHTML='';
-  for(let i=0;i<16;i++){
-    const cell=document.createElement('div');
-    cell.className='gridCell';
+let dict = [];
+let dictLoaded = false;
+
+let solutions = [];
+let activeSolutionIndex = -1;
+
+const boardSvg = el('board');
+const statusPill = el('status');
+const gridInput = el('gridInput');
+const stepsBox = el('steps');
+const solutionLabel = el('solutionLabel');
+
+/* ========= 初始化输入网格 ========= */
+function createGrid() {
+  gridInput.innerHTML = '';
+  for (let i = 0; i < N * N; i++) {
+    const cell = document.createElement('div');
+    cell.className = 'gridCell empty';
+    cell.dataset.index = i;
+    cell.addEventListener('click', () => {
+      cursorIndex = i;
+      updateGrid();
+    });
     gridInput.appendChild(cell);
   }
 }
 createGrid();
 
-function updateGrid(){[...gridInput.children].forEach((c,i)=>c.textContent=lettersArr[i]||'');}
+function updateGrid() {
+  const cells = gridInput.children;
+  for (let i = 0; i < cells.length; i++) {
+    const c = cells[i];
+    const ch = lettersArr[i] || '';
+    c.textContent = ch;
+    c.classList.toggle('cursor', i === cursorIndex);
+    c.classList.toggle('empty', !ch);
+  }
+}
 
-gridInput.addEventListener('click', e => {
-  if (e.target.classList.contains('gridCell')) {
-    hiddenInput.focus();
-  }
-});
-document.addEventListener('click', e => {
-  if (!e.target.classList.contains('gridCell')) {
-    hiddenInput.blur();
-  }
-});
-hiddenInput.addEventListener('input', e=>{
-  const val = e.target.value.toUpperCase().replace(/[^A-Z]/g,'');
-  lettersArr = val.split('').slice(0,16);
+/* ========= 键盘输入逻辑 ========= */
+function moveCursor(dr, dc) {
+  let r = Math.floor(cursorIndex / N);
+  let c = cursorIndex % N;
+  r = Math.min(N - 1, Math.max(0, r + dr));
+  c = Math.min(N - 1, Math.max(0, c + dc));
+  cursorIndex = r * N + c;
   updateGrid();
+}
+
+document.addEventListener('keydown', (e) => {
+  // Ctrl+左右 切方案
+  if (e.ctrlKey && e.key === 'ArrowRight') {
+    e.preventDefault();
+    nextSolution();
+    return;
+  }
+  if (e.ctrlKey && e.key === 'ArrowLeft') {
+    e.preventDefault();
+    prevSolution();
+    return;
+  }
+
+  // 方向键移动光标
+  if (e.key === 'ArrowUp') {
+    e.preventDefault();
+    moveCursor(-1, 0);
+    return;
+  }
+  if (e.key === 'ArrowDown') {
+    e.preventDefault();
+    moveCursor(1, 0);
+    return;
+  }
+  if (e.key === 'ArrowLeft') {
+    e.preventDefault();
+    moveCursor(0, -1);
+    return;
+  }
+  if (e.key === 'ArrowRight') {
+    e.preventDefault();
+    moveCursor(0, 1);
+    return;
+  }
+
+  // Enter 搜索
+  if (e.key === 'Enter') {
+    e.preventDefault();
+    runSearch();
+    return;
+  }
+
+  // 空格：清空当前格
+  if (e.key === ' ') {
+    e.preventDefault();
+    lettersArr[cursorIndex] = '';
+    moveCursor(0, 1);
+    updateGrid();
+    return;
+  }
+
+  // Backspace：清空当前格，往前一个
+  if (e.key === 'Backspace') {
+    e.preventDefault();
+    lettersArr[cursorIndex] = '';
+    moveCursor(0, -1);
+    updateGrid();
+    return;
+  }
+
+  // 字母输入
+  if (e.key.length === 1 && /[a-zA-Z]/.test(e.key)) {
+    lettersArr[cursorIndex] = e.key.toUpperCase();
+    moveCursor(0, 1);
+    updateGrid();
+    return;
+  }
 });
 
-document.addEventListener('keydown',e=>{
-  if(document.activeElement.tagName==='INPUT' && e.target!==hiddenInput)return;
-  if(e.key.length===1&&/[a-zA-Z]/.test(e.key)){
-    const idx=lettersArr.findIndex(ch=>!ch);
-    if(idx!==-1)lettersArr[idx]=e.key.toUpperCase();
-  }else if(e.key==='Backspace'){
-    const idx=lettersArr.slice().reverse().findIndex(ch=>ch);
-    if(idx!==-1)lettersArr[15-idx]='';
-  }else if(e.key==='Enter'){el('runBtn').click();}
-  else if(e.key === 'ArrowRight'){ el('nextBtn').click(); }
-  else if(e.key === 'ArrowLeft'){ el('prevBtn').click(); }
+/* ========= 读取棋盘为二维数组 ========= */
+function getGridLetters2D() {
+  const grid = [];
+  for (let r = 0; r < N; r++) {
+    const row = [];
+    for (let c = 0; c < N; c++) {
+      const ch = lettersArr[r * N + c] || '';
+      row.push(ch);
+    }
+    grid.push(row);
+  }
+  return grid;
+}
+
+/* ========= 识别 Word Bites 方块 ========= */
+/*
+  规则：
+  - 用 上下左右 连通的字母格组成一个块
+  - 每个块最多 2 格，否则报错（Word Bites 方块为 1 或 2 字母）
+  - 若两格不在同一行/同一列（L 形）则报错
+  - 对于双格：
+    - 水平方向：左→右
+    - 垂直方向：上→下
+*/
+function buildBlocksFromGrid(grid) {
+  const visited = Array.from({ length: N }, () => Array(N).fill(false));
+  const blocks = [];
+  const blocksByLetters = new Map();
+  let totalLetters = 0;
+
+  const inBounds = (r, c) => r >= 0 && r < N && c >= 0 && c < N;
+
+  for (let r = 0; r < N; r++) {
+    for (let c = 0; c < N; c++) {
+      if (visited[r][c]) continue;
+      const ch = grid[r][c];
+      if (!ch) continue;
+
+      // BFS 找连通块
+      const q = [[r, c]];
+      visited[r][c] = true;
+      const cells = [];
+
+      while (q.length) {
+        const [cr, cc] = q.shift();
+        cells.push({ r: cr, c: cc });
+        const dirs = [[1,0],[-1,0],[0,1],[0,-1]];
+        for (const [dr, dc] of dirs) {
+          const nr = cr + dr, nc = cc + dc;
+          if (!inBounds(nr, nc) || visited[nr][nc]) continue;
+          if (!grid[nr][nc]) continue;
+          visited[nr][nc] = true;
+          q.push([nr, nc]);
+        }
+      }
+
+      if (cells.length > 2) {
+        throw new Error('检测到一个包含 ' + cells.length + ' 格的连通块（>2），不符合 Word Bites 方块规则。');
+      }
+
+      let orientation = 'S'; // 单格
+      if (cells.length === 2) {
+        const [a, b] = cells;
+        if (a.r === b.r) orientation = 'H';
+        else if (a.c === b.c) orientation = 'V';
+        else throw new Error('检测到非直线形方块（像 L 字），不符合 Word Bites 方块规则。');
+      }
+
+      // 按读字顺序排序
+      let sortedCells;
+      if (orientation === 'H') {
+        sortedCells = cells.slice().sort((p, q2) => p.c - q2.c || p.r - q2.r);
+      } else if (orientation === 'V') {
+        sortedCells = cells.slice().sort((p, q2) => p.r - q2.r || p.c - q2.c);
+      } else {
+        sortedCells = cells.slice();
+      }
+
+      let letters = '';
+      for (const { r: rr, c: cc } of sortedCells) {
+        letters += grid[rr][cc].toLowerCase();
+      }
+
+      const block = {
+        id: blocks.length,
+        letters,
+        orientation,
+        cells: sortedCells
+      };
+      blocks.push(block);
+      totalLetters += letters.length;
+
+      if (!blocksByLetters.has(letters)) blocksByLetters.set(letters, []);
+      blocksByLetters.get(letters).push(block.id);
+    }
+  }
+
+  return { blocks, blocksByLetters, totalLetters };
+}
+
+/* ========= 字母统计，用于剪枝 ========= */
+function computeLetterCounts(blocks) {
+  const counts = {};
+  for (const b of blocks) {
+    for (const ch of b.letters) {
+      counts[ch] = (counts[ch] || 0) + 1;
+    }
+  }
+  return counts;
+}
+
+/* ========= 判断一个单词能否由这些方块拼成（只考虑字母 & 字段，不考虑位置） ========= */
+function findSegmentation(word, tileTypes, totalLetters, letterCounts) {
+  const w = word.toLowerCase();
+  if (w.length < 3) return null;
+  if (w.length > totalLetters) return null;
+
+  const localCounts = {};
+  for (const ch of w) {
+    localCounts[ch] = (localCounts[ch] || 0) + 1;
+  }
+  for (const ch in localCounts) {
+    if (localCounts[ch] > (letterCounts[ch] || 0)) return null;
+  }
+
+  const typeCount = tileTypes.length;
+  const counts = tileTypes.map(t => t.count);
+  const resIndices = [];
+  const memo = new Map();
+
+  function dfs(pos) {
+    if (pos === w.length) return true;
+    const key = pos + '|' + counts.join(',');
+    if (memo.has(key)) return false;
+
+    for (let i = 0; i < typeCount; i++) {
+      if (counts[i] === 0) continue;
+      const tStr = tileTypes[i].str;
+      const len = tStr.length;
+      if (len > w.length - pos) continue;
+      if (w.substr(pos, len) === tStr) {
+        counts[i]--;
+        resIndices.push(i);
+        if (dfs(pos + len)) return true;
+        resIndices.pop();
+        counts[i]++;
+      }
+    }
+    memo.set(key, false);
+    return false;
+  }
+
+  const ok = dfs(0);
+  if (!ok) return null;
+  return resIndices.slice();
+}
+
+/* ========= 为一个单词规划“最少移动次数”的摆法 ========= */
+/*
+  输入：
+    word: 字符串（已确认可由方块拼出）
+    segments: [tileStr1, tileStr2, ...]，这些 tile 串拼接起来就是 word
+*/
+function planWord(word, segments, blocks, blocksByLetters) {
+  const segCount = segments.length;
+  const L = word.length;
+  if (L > N) return null;
+
+  let best = null;
+  const sizeCache = new Map();
+
+  function tryPlacement(dir, fixedIndex) {
+    const maxStart = N - L;
+    for (let start = 0; start <= maxStart; start++) {
+      const segmentCells = [];
+      let offset = 0;
+
+      for (let si = 0; si < segCount; si++) {
+        const segLen = segments[si].length;
+        const cells = [];
+        for (let k = 0; k < segLen; k++) {
+          const r = dir === 'H' ? fixedIndex : start + offset + k;
+          const c = dir === 'H' ? start + offset + k : fixedIndex;
+          cells.push({ r, c });
+        }
+        segmentCells.push(cells);
+        offset += segLen;
+      }
+
+      // 构建“segment -> 可以保持不动的 block” 的邻接关系
+      const segToBlocks = segmentCells.map(() => []);
+      const blockCellsSortedCache = {};
+
+      for (let si = 0; si < segCount; si++) {
+        const segStr = segments[si];
+        const blockIds = blocksByLetters.get(segStr) || [];
+        const targetSorted = segmentCells[si].slice().sort((a, b) => a.r - b.r || a.c - b.c);
+        const targetKey = targetSorted.map(p => p.r + ',' + p.c).join(';');
+
+        for (const bId of blockIds) {
+          const b = blocks[bId];
+          if (dir === 'H' && b.orientation === 'V') continue;
+          if (dir === 'V' && b.orientation === 'H') continue;
+
+          if (!blockCellsSortedCache[bId]) {
+            const sorted = b.cells.slice().sort((a, b2) => a.r - b2.r || a.c - b2.c);
+            const key = sorted.map(p => p.r + ',' + p.c).join(';');
+            blockCellsSortedCache[bId] = { cells: sorted, key };
+          }
+          if (blockCellsSortedCache[bId].key === targetKey) {
+            segToBlocks[si].push(bId);
+          }
+        }
+      }
+
+      // 最大匹配：尽量多的 segment 可以不用移动
+      const matchBlockToSeg = {};
+      let stationaryCount = 0;
+
+      function canAssign(segIndex, visitedBlocks) {
+        for (const bId of segToBlocks[segIndex]) {
+          if (visitedBlocks.has(bId)) continue;
+          visitedBlocks.add(bId);
+          if (matchBlockToSeg[bId] == null || canAssign(matchBlockToSeg[bId], visitedBlocks)) {
+            matchBlockToSeg[bId] = segIndex;
+            return true;
+          }
+        }
+        return false;
+      }
+
+      for (let si = 0; si < segCount; si++) {
+        const visited = new Set();
+        if (canAssign(si, visited)) stationaryCount++;
+      }
+
+      const moves = segCount - stationaryCount;
+      if (
+        !best ||
+        moves < best.moves ||
+        (moves === best.moves && word.length > best.wordLength)
+      ) {
+        const segAssignedBlock = Array(segCount).fill(null);
+        for (const bIdStr in matchBlockToSeg) {
+          const bId = Number(bIdStr);
+          const sIndex = matchBlockToSeg[bId];
+          segAssignedBlock[sIndex] = bId;
+        }
+        best = {
+          moves,
+          direction: dir,
+          fixedIndex,
+          start,
+          segmentCells,
+          segAssignedBlock,
+          wordLength: word.length
+        };
+      }
+    }
+  }
+
+  for (let row = 0; row < N; row++) tryPlacement('H', row);
+  for (let col = 0; col < N; col++) tryPlacement('V', col);
+
+  return best;
+}
+
+/* ========= 生成一个完整方案对象（含移动步骤 & 最终棋盘） ========= */
+function buildSolution(word, segments, bestPlan, blocks, blocksByLetters, initialGrid) {
+  const segCount = segments.length;
+  const segAssignedBlock = bestPlan.segAssignedBlock; // 部分 segment 已经分配了“原地不动”的块
+
+  const usedBlockIds = new Set();
+  const stationaryBlocks = new Set();
+  const segBlockId = Array(segCount).fill(null);
+
+  // 已经原位的块
+  for (let si = 0; si < segCount; si++) {
+    const bId = segAssignedBlock[si];
+    if (bId != null) {
+      segBlockId[si] = bId;
+      usedBlockIds.add(bId);
+      stationaryBlocks.add(bId);
+    }
+  }
+
+  // 为剩余 segment 分配需要移动的块（同字母串即可）
+  const availableByStr = new Map();
+  blocksByLetters.forEach((ids, str) => {
+    const remaining = ids.filter(id => !usedBlockIds.has(id));
+    availableByStr.set(str, remaining.slice());
+  });
+
+  for (let si = 0; si < segCount; si++) {
+    if (segBlockId[si] != null) continue;
+    const str = segments[si];
+    const avail = availableByStr.get(str) || [];
+    if (!avail.length) continue;
+    const bId = avail.shift();
+    segBlockId[si] = bId;
+    usedBlockIds.add(bId);
+  }
+
+  const steps = [];
+  const wordCells = [];
+  for (let si = 0; si < segCount; si++) {
+    const bId = segBlockId[si];
+    if (bId == null) continue; // 理论上不会
+    const b = blocks[bId];
+    const targetCells = bestPlan.segmentCells[si];
+    const fromCells = b.cells;
+    const moved = !stationaryBlocks.has(bId);
+    steps.push({
+      index: si + 1,
+      tileStr: b.letters.toUpperCase(),
+      moved,
+      from: fromCells,
+      to: targetCells
+    });
+    for (const cell of targetCells) wordCells.push({ r: cell.r, c: cell.c });
+  }
+
+  // 构造最终棋盘：先复制，再把参与的块清空并放到目标位置
+  const finalGrid = initialGrid.map(row => row.slice());
+
+  usedBlockIds.forEach(bId => {
+    const b = blocks[bId];
+    for (const { r, c } of b.cells) {
+      finalGrid[r][c] = '';
+    }
+  });
+
+  for (let si = 0; si < segCount; si++) {
+    const bId = segBlockId[si];
+    if (bId == null) continue;
+    const b = blocks[bId];
+    const targetCells = bestPlan.segmentCells[si];
+    const letters = b.letters.toUpperCase();
+    for (let k = 0; k < targetCells.length; k++) {
+      const { r, c } = targetCells[k];
+      finalGrid[r][c] = letters[k];
+    }
+  }
+
+  return {
+    word,
+    moves: bestPlan.moves,
+    direction: bestPlan.direction,
+    fixedIndex: bestPlan.fixedIndex,
+    start: bestPlan.start,
+    steps,
+    finalGrid,
+    wordCells
+  };
+}
+
+/* ========= 画棋盘 ========= */
+function drawBoardWithSolution(grid, wordCells, movedCellsSet) {
+  boardSvg.innerHTML = '';
+  const size = 520, pad = 20, cellSize = (size - 2 * pad) / N;
+
+  const highlightSet = new Set();
+  if (wordCells) {
+    for (const { r, c } of wordCells) {
+      highlightSet.add(r + ',' + c);
+    }
+  }
+
+  for (let r = 0; r < N; r++) {
+    for (let c = 0; c < N; c++) {
+      const x = pad + c * cellSize;
+      const y = pad + r * cellSize;
+      const key = r + ',' + c;
+
+      let stroke = '#1e2b3b';
+      let fill = '#0f1620';
+
+      if (highlightSet.has(key)) {
+        stroke = '#6fd3ff';
+      }
+      if (movedCellsSet && movedCellsSet.has(key)) {
+        fill = '#123025';
+      }
+
+      const rect = document.createElementNS('http://www.w3.org/2000/svg','rect');
+      rect.setAttribute('x', x);
+      rect.setAttribute('y', y);
+      rect.setAttribute('width', cellSize - 2);
+      rect.setAttribute('height', cellSize - 2);
+      rect.setAttribute('rx', 10);
+      rect.setAttribute('ry', 10);
+      rect.setAttribute('fill', fill);
+      rect.setAttribute('stroke', stroke);
+      boardSvg.appendChild(rect);
+    }
+  }
+
+  for (let r = 0; r < N; r++) {
+    for (let c = 0; c < N; c++) {
+      const ch = grid[r][c] || '';
+      if (!ch) continue;
+      const x = pad + c * cellSize + cellSize / 2;
+      const y = pad + r * cellSize + cellSize / 2 + 7;
+      const text = document.createElementNS('http://www.w3.org/2000/svg','text');
+      text.setAttribute('x', x);
+      text.setAttribute('y', y);
+      text.setAttribute('text-anchor','middle');
+      text.setAttribute('font-size','26');
+      text.setAttribute('font-weight','700');
+      text.setAttribute('fill','#dbe7f4');
+      text.textContent = ch;
+      boardSvg.appendChild(text);
+    }
+  }
+}
+
+/* ========= 更新步骤文本 ========= */
+function renderSteps(solution) {
+  stepsBox.innerHTML = '';
+  const h3 = document.createElement('h3');
+  h3.textContent = `单词：${solution.word.toUpperCase()}（移动 ${solution.moves} 块）`;
+  stepsBox.appendChild(h3);
+
+  const info = document.createElement('div');
+  const dirText = solution.direction === 'H' ? '水平' : '垂直';
+  const lineIndex = solution.fixedIndex + 1;
+  info.textContent = `摆放方向：${dirText} · 第 ${lineIndex} 行/列 · 从第 ${solution.start + 1} 格开始`;
+  stepsBox.appendChild(info);
+
+  if (!solution.steps.length) {
+    const p = document.createElement('div');
+    p.textContent = '（没有使用任何块？这不应该发生…）';
+    stepsBox.appendChild(p);
+    return;
+  }
+
+  const ulTitle = document.createElement('div');
+  ulTitle.style.marginTop = '4px';
+  ulTitle.textContent = '具体移动步骤：';
+  stepsBox.appendChild(ulTitle);
+
+  const ol = document.createElement('ol');
+  for (const step of solution.steps) {
+    const li = document.createElement('li');
+    const fromStr = step.from.map(p => `(${p.r+1},${p.c+1})`).join(' ');
+    const toStr = step.to.map(p => `(${p.r+1},${p.c+1})`).join(' ');
+    if (step.moved) {
+      li.textContent = `移动块 "${step.tileStr}"：从 ${fromStr} → 到 ${toStr}`;
+    } else {
+      li.textContent = `块 "${step.tileStr}" 已在目标位置 ${toStr}，无需移动`;
+    }
+    ol.appendChild(li);
+  }
+  stepsBox.appendChild(ol);
+}
+
+/* ========= 显示某个方案 ========= */
+function setActiveSolution(idx) {
+  if (!solutions.length) {
+    activeSolutionIndex = -1;
+    solutionLabel.textContent = '0 / 0';
+    drawBoardWithSolution(getGridLetters2D(), [], null);
+    stepsBox.innerHTML = '<h3>步骤 / Steps</h3><div>没有方案，请检查棋盘或字典。</div>';
+    return;
+  }
+  activeSolutionIndex = (idx + solutions.length) % solutions.length;
+  const s = solutions[activeSolutionIndex];
+
+  // 哪些格子使用了“被移动的块”
+  const movedCellsSet = new Set();
+  for (const step of s.steps) {
+    if (!step.moved) continue;
+    for (const cell of step.to) {
+      movedCellsSet.add(cell.r + ',' + cell.c);
+    }
+  }
+
+  drawBoardWithSolution(s.finalGrid, s.wordCells, movedCellsSet);
+  renderSteps(s);
+  solutionLabel.textContent = `${activeSolutionIndex + 1} / ${solutions.length}`;
+  statusPill.textContent = `找到 ${solutions.length} 个单词 · 当前：${s.word.toUpperCase()} · 移动 ${s.moves} 块`;
+  statusPill.classList.remove('bad');
+}
+
+/* ========= 上一/下一方案 ========= */
+function nextSolution() {
+  if (!solutions.length) return;
+  setActiveSolution(activeSolutionIndex + 1);
+}
+function prevSolution() {
+  if (!solutions.length) return;
+  setActiveSolution(activeSolutionIndex - 1);
+}
+
+el('nextBtn').onclick = nextSolution;
+el('prevBtn').onclick = prevSolution;
+
+/* ========= 搜索主流程 ========= */
+async function runSearch() {
+  if (!dictLoaded) {
+    alert('Dictionary not loaded yet.');
+    return;
+  }
+  const grid = getGridLetters2D();
+
+  try {
+    const { blocks, blocksByLetters, totalLetters } = buildBlocksFromGrid(grid);
+    if (!blocks.length) {
+      statusPill.textContent = '棋盘上没有任何字母块。';
+      statusPill.classList.add('bad');
+      return;
+    }
+
+    const letterCounts = computeLetterCounts(blocks);
+
+    // tileTypes: {str, count}
+    const tileTypes = [];
+    blocksByLetters.forEach((ids, str) => {
+      tileTypes.push({ str, count: ids.length });
+    });
+
+    const candidates = [];
+    for (const w of dict) {
+      if (w.length < 3 || w.length > N) continue;
+      const segIndices = findSegmentation(w, tileTypes, totalLetters, letterCounts);
+      if (!segIndices) continue;
+      const segments = segIndices.map(i => tileTypes[i].str);
+      const bestPlan = planWord(w, segments, blocks, blocksByLetters);
+      if (!bestPlan) continue;
+      const solution = buildSolution(w, segments, bestPlan, blocks, blocksByLetters, grid);
+      candidates.push(solution);
+    }
+
+    if (!candidates.length) {
+      solutions = [];
+      setActiveSolution(-1);
+      statusPill.textContent = '没有找到可拼的单词。';
+      statusPill.classList.add('bad');
+      return;
+    }
+
+    // 排序：先按移动块数升序，再按单词长度降序，再按字典顺序
+    candidates.sort((a, b) => {
+      if (a.moves !== b.moves) return a.moves - b.moves;
+      if (b.word.length !== a.word.length) return b.word.length - a.word.length;
+      return a.word.localeCompare(b.word);
+    });
+
+    solutions = candidates;
+    setActiveSolution(0);
+  } catch (err) {
+    console.error(err);
+    statusPill.textContent = '错误：' + err.message;
+    statusPill.classList.add('bad');
+  }
+}
+
+/* ========= 按钮事件 ========= */
+el('runBtn').onclick = runSearch;
+el('clearBtn').onclick = () => {
+  lettersArr = Array(N * N).fill('');
+  cursorIndex = 0;
   updateGrid();
-});
-
-document.addEventListener('beforeinput', e => {
-  if (e.data && !/^[a-zA-Z]$/.test(e.data)) e.preventDefault();
-});
-
-async function autoLoadDict(){
-  try{
-    const res=await fetch('../scrabble_words.txt');
-    if(!res.ok)throw new Error('not found');
-    const text=await res.text();
-    for(const line of text.split(/\r?\n/)){
-      const w=line.trim().toLowerCase();
-      if(w&&/^[a-z]{3,}$/.test(w))trie.insert(w);
-    }
-    dictLoaded=true;
-    statusPill.textContent='Dictionary loaded';
-  }catch(e){statusPill.textContent='❌ Dictionary not found';}
-}
-autoLoadDict();
-
-function getLetters(){return lettersArr.join('').toLowerCase();}
-function searchAll(letters){
-  const grid=Array.from({length:N},(_,r)=>Array.from({length:N},(_,c)=>letters[r*N+c]));
-  const used=Array.from({length:N},()=>Array(N).fill(false));
-  const found=new Map();
-  function dfs(r,c,cur,coords){
-    if(!trie.startsWith(cur))return;
-    if(cur.length>=3&&trie.search(cur)){
-      const path=coords.map(([rr,cc])=>`${rr+1}${cc+1}`).join(' ');
-      if(!found.has(cur))found.set(cur,path);
-    }
-    for(const[dr,dc]of DIRS){
-      const nr=r+dr,nc=c+dc;
-      if(nr<0||nr>=N||nc<0||used[nr][nc])continue;
-      used[nr][nc]=true;
-      dfs(nr,nc,cur+grid[nr][nc],coords.concat([[nr,nc]]));
-      used[nr][nc]=false;
-    }
+  drawBoardWithSolution(getGridLetters2D(), [], null);
+  solutions = [];
+  activeSolutionIndex = -1;
+  solutionLabel.textContent = '0 / 0';
+  stepsBox.innerHTML = '<h3>步骤 / Steps</h3><div>已清空棋盘。</div>';
+  if (dictLoaded) {
+    statusPill.textContent = 'Board cleared · Dictionary loaded';
+    statusPill.classList.remove('bad');
   }
-  for(let r=0;r<N;r++)for(let c=0;c<N;c++){
-    used[r][c]=true;dfs(r,c,grid[r][c],[[r,c]]);used[r][c]=false;
-  }
-  const vec=[];
-  for(const[w,p]of found.entries()){vec.push({word:w,pathStr:p,coords:p.split(' ').map(s=>[+s[0]-1,+s[1]-1])});}
-  vec.sort((a,b)=>b.word.length-a.word.length||a.word.localeCompare(b.word));
-  return vec.slice(0,64);
-}
-
-function node(tag,a){const e=document.createElementNS('http://www.w3.org/2000/svg',tag);for(const k in a)e.setAttribute(k,a[k]);return e;}
-function drawBoard(letters){
-  board.innerHTML='';
-  const size=520,pad=20,cell=(size-2*pad)/N;
-  for(let r=0;r<N;r++)for(let c=0;c<N;c++){
-    const x=pad+c*cell,y=pad+r*cell;
-    board.appendChild(node('rect',{x,y,width:cell-2,height:cell-2,rx:14,ry:14,fill:'#0f1620',stroke:'#1e2b3b'}));
-  }
-  for(let r=0;r<N;r++)for(let c=0;c<N;c++){
-    const x=pad+c*cell+cell/2,y=pad+r*cell+cell/2+8,ch=letters[r*N+c]?.toUpperCase()||'';
-    const t=node('text',{x,y,fill:'#dbe7f4','text-anchor':'middle','font-size':40,'font-weight':700});t.textContent=ch;board.appendChild(t);
-  }
-}
-function drawPath(coords){
-  const size=520,pad=20,cell=(size-2*pad)/N;
-  const pts=coords.map(([r,c])=>[pad+c*cell+cell/2,pad+r*cell+cell/2]);
-  for(let i=0;i<pts.length-1;i++){const[x1,y1]=pts[i],[x2,y2]=pts[i+1];board.appendChild(node('line',{x1,y1,x2,y2,stroke:'#6fd3ff','stroke-width':6,'stroke-linecap':'round'}));}
-  coords.forEach(([r,c],i)=>{const cx=pad+c*cell+cell/2,cy=pad+r*cell+cell/2;board.appendChild(node('circle',{cx,cy,r:14,fill:i? '#6fd3ff':'#60ffa7'}));});
-}
-function setActive(i){
-  if(!results.length)return;activeIndex=(i+results.length)%results.length;
-  const r=results[activeIndex];
-  statusPill.textContent=`${activeIndex+1}/${results.length} · ${r.word}`;
-  drawBoard(lockedLetters||getLetters());drawPath(r.coords);
-}
-
-el('runBtn').onclick=()=>{
-  if(!dictLoaded){alert('Dictionary not loaded.');return;}
-  const letters=getLetters();
-  if(letters.length!==16){alert('Please enter 16 letters.');return;}
-  results=searchAll(letters);
-  if(!results.length){statusPill.textContent='No word found';drawBoard(letters);return;}
-  lockedLetters = getLetters();
-  setActive(0);
 };
-el('nextBtn').onclick=()=>{if(results.length)setActive(activeIndex+1)};
-el('prevBtn').onclick=()=>{if(results.length)setActive(activeIndex-1)};
-el('clearBtn').onclick=()=>{
-  lettersArr=Array(16).fill('');
-  updateGrid();
-  hiddenInput.value='';
-  drawBoard(' '.repeat(16));
-  results=[];activeIndex=-1;
-  lockedLetters = null;
-  if(dictLoaded){statusPill.textContent='Cleared';}
-};
-drawBoard(' '.repeat(16));
+
+/* ========= 字典加载 ========= */
+async function loadDict() {
+  try {
+    const res = await fetch('./scrabble_words.txt');
+    if (!res.ok) throw new Error('scrabble_words.txt not found');
+    const text = await res.text();
+    const words = [];
+    for (const line of text.split(/\r?\n/)) {
+      const w = line.trim().toLowerCase();
+      if (!w) continue;
+      if (!/^[a-z]+$/.test(w)) continue;
+      if (w.length < 3 || w.length > N) continue; // Word Bites 单词长度至多 8（1 行）
+      words.push(w);
+    }
+    dict = words;
+    dictLoaded = true;
+    statusPill.textContent = `Dictionary loaded · ${dict.length} words`;
+    statusPill.classList.remove('bad');
+  } catch (e) {
+    statusPill.textContent = '❌ Cannot load scrabble_words.txt';
+    statusPill.classList.add('bad');
+  }
+}
+
+/* ========= 启动 ========= */
+updateGrid();
+drawBoardWithSolution(getGridLetters2D(), [], null);
+loadDict();
 </script>
 </body>
 </html>
