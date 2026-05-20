@@ -9,11 +9,7 @@ html {
 }
 
 body {
-    font-family: Arial, sans-serif;
     background-color: #f4f4f4;
-    color: #333;
-    padding: 20px;
-    max-width: 850px;
     margin: 0 auto;
 }
 
@@ -28,7 +24,6 @@ img {
 /* Banner Section */
 .banner {
     width: 100%;
-    height: 200px;
     background-image: url('img/banner.jpg');
     background-size: cover;
     background-position: center;
@@ -38,39 +33,27 @@ img {
 /* Profile Section */
 header {
     background-color: white;
-    padding: 20px;
     margin-bottom: 20px;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     display: flex;
     flex-direction: column;
-    align-items: center;
-    text-align: center;
 }
 
 .profile-info {
     margin-top: -80px;
     display: flex;
-    flex-direction: column;
-    align-items: center;
 }
 
 .profile-pic {
-    width: 120px;
-    height: 120px;
     border-radius: 50%;
-    border: 5px solid white;
 }
 
 .info-text h1 {
-    font-size: 24px;
-    margin-bottom: 5px;
     display: inline-block;
 }
 
 .pronoun {
-    font-size: 18px;
-    color: #777;
     margin-left: 10px;
 }
 
@@ -80,7 +63,6 @@ header {
 }
 
 .profile-actions {
-    margin-top: 20px;
     display: flex;
     gap: 10px;
 }
@@ -89,10 +71,7 @@ header {
     display: flex;
     align-items: center;
     padding: 8px 16px;
-    border: 1px solid #0073b1;
     background-color: white;
-    color: #0073b1;
-    border-radius: 4px;
     cursor: pointer;
     margin-right: 8px;
 }
@@ -146,11 +125,6 @@ main {
     background-color: white;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    padding: 30px;
-}
-
-.module + .module {
-    margin-top: 20px; /* Add margin between each module */
 }
 
 .module h2 {
@@ -161,8 +135,6 @@ main {
 
 .module-item {
     display: flex;
-    gap: 20px;
-    margin-top: 15px;
     align-items: stretch; /* 让子元素拉伸至相同高度 */
 }
 
@@ -172,9 +144,6 @@ main {
 }
 
 .module-img {
-    width: 60px;
-    height: 60px;
-    border-radius: 8px;
     object-fit: contain;
 }
 
@@ -185,20 +154,13 @@ main {
 
 .module-right {
     flex: 1;
-    display: flex; /* 关键：确保 flex 布局生效 */
-    justify-content: center; /* 让子元素在主轴（垂直方向）上居中 */
+    display: flex; /* 关键：确保 flex 布局生效 */ /* 让子元素在主轴（垂直方向）上居中 */
     flex-direction: column; /* 让子元素按列排列 */
-}
-
-.module-right h3 {
-    font-size: 16px;
-    margin-bottom: 4px;
 }
 
 .module-right h4 {
     font-size: 15px;
     margin-bottom: 2px;
-    color: #555;
 }
 
 .module-right h5 {
@@ -243,22 +205,16 @@ main {
 
 /* Skills Grid Section */
 .skills-grid {
-    display: flex;
     flex-wrap: wrap;
     gap: 10px;
 }
 
 .skill-item {
     background-color: #fafafa;
-    padding: 10px 15px;
-    border-radius: 5px;
-    flex: 1 1 calc((100% - 20px) / 3);
-    max-width: calc((100% - 20px) / 3);
     text-align: center;
     font-size: 15px;
     font-weight: 600;
     color: #333;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .skill-item p {
@@ -301,7 +257,6 @@ main {
 
 .about-content {
     display: flex;
-    gap: 15px;
     align-items: flex-start;
     flex-direction: column;
 }
@@ -310,7 +265,6 @@ main {
     flex: 0 0 auto; /* Slightly narrower width */
     display: flex;
     flex-direction: row;
-    gap: 8px;
 }
 
 .about-item {
@@ -331,7 +285,6 @@ main {
 }
 
 .about-right p {
-    font-size: 15px;
     color: #666;
     line-height: 1.5;
 }
@@ -344,8 +297,7 @@ main {
 /* Contact Section Adjustments */
 .contact-section {
     display: flex;
-    flex-direction: column;
-    gap: 15px; /* Reduced gap between title and contact items */
+    flex-direction: column; /* Reduced gap between title and contact items */
 }
 
 .contact-item {
@@ -363,7 +315,6 @@ main {
 
 .contact-item a {
     color: inherit;
-    text-decoration: none;
     font-size: 15px;
     text-decoration: underline;
 }
@@ -384,8 +335,6 @@ main {
         width: 100%;
     }
 }
-
-
 
 
 /* ========== Dark Mode ========== */
@@ -429,7 +378,7 @@ main {
     }
 
     strong, b {
-        color: #c0c0c0; /* 让加粗文字真正“亮起来” */
+        color: #c0c0c0;
     }
 
     /* ====== skill-item ====== */
@@ -443,7 +392,7 @@ main {
         color: #bbbbbb !important;
     }
 
-    /* ====== 交互元素 ====== */
+    /* ====== interactive ====== */
     .profile-actions a.button {
         background-color: #2b2b2b;
         color: #66b3ff;
@@ -475,5 +424,1440 @@ main {
     /* ====== 边框 / 分割线 / 阴影 ====== */
     .module {
         border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+}
+
+/* ========== Professional LinkedIn-inspired refresh ========== */
+:root {
+    --page-bg: #f3f6f8;
+    --card-bg: #ffffff;
+    --text-main: #1f2933;
+    --text-muted: #64748b;
+    --text-soft: #7a8794;
+    --brand: #0a66c2;
+    --brand-soft: #e8f3ff;
+    --line: #dde6ee;
+    --shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+    --shadow-soft: 0 3px 14px rgba(15, 23, 42, 0.06);
+    --radius-lg: 18px;
+    --radius-md: 12px;
+}
+
+body {
+    font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+    background:
+        radial-gradient(circle at top left, rgba(10, 102, 194, 0.10), transparent 34rem),
+        var(--page-bg);
+    color: var(--text-main);
+    padding: 28px 20px 44px;
+    line-height: 1.5;
+}
+
+header,
+.module {
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-soft);
+    overflow: hidden;
+}
+
+header {
+    padding: 0 0 26px;
+    align-items: stretch;
+    text-align: left;
+}
+
+.banner {
+    border-radius: 0;
+    position: relative;
+}
+
+.banner::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,0.05), rgba(0,0,0,0.18));
+}
+
+.profile-info {
+    position: relative;
+    flex-direction: row;
+}
+
+.profile-pic {
+    border: 6px solid var(--card-bg);
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.18);
+}
+
+.info-text h1 {
+    font-size: clamp(26px, 4vw, 34px);
+    letter-spacing: -0.035em;
+}
+
+.info-text p,
+.module-right h6,
+.module-right h5,
+.module-right p,
+.module li {
+    color: var(--text-muted);
+}
+
+.pronoun {
+    font-size: 15px;
+    background: #eef2f6;
+    color: var(--text-muted);
+    padding: 4px 9px;
+    border-radius: 999px;
+    vertical-align: middle;
+}
+
+.profile-actions {
+    margin: 22px 28px 0;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+}
+
+.profile-actions a.button {
+    border-radius: 999px;
+    border: 1px solid var(--brand);
+    color: var(--brand);
+    font-weight: 700;
+    min-height: 40px;
+    transition: transform .18s ease, box-shadow .18s ease, background-color .18s ease;
+}
+
+.profile-actions a.button:first-child {
+    background: var(--brand);
+    color: #fff;
+}
+
+.profile-actions a.button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 18px rgba(10, 102, 194, 0.16);
+}
+
+.module {
+    padding: 0;
+    background: var(--card-bg);
+    transition: none;
+}
+
+.module + .module {
+    margin-top: 0;
+}
+
+
+.module-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    border-bottom: 1px solid var(--line);
+}
+
+.module-title-group h2 {
+    margin: 0;
+    letter-spacing: -0.02em;
+}
+
+.module-title-group h2::before {
+    content: "";
+    display: inline-block;
+    width: 4px;
+    height: 19px;
+    margin-right: 10px;
+    border-radius: 999px;
+    background: var(--brand);
+    vertical-align: -3px;
+}
+
+.module-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid transparent;
+    border-radius: 999px;
+    background: var(--brand-soft);
+    color: var(--brand);
+    padding: 7px 12px;
+    font: inherit;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color .18s ease, transform .18s ease;
+    white-space: nowrap;
+}
+
+.module-toggle:hover {
+    background: #d7ebff;
+    transform: translateY(-1px);
+}
+
+.module-toggle i {
+    transition: transform .2s ease;
+}
+
+.module-toggle[aria-expanded="true"] i {
+    transform: rotate(180deg);
+}
+
+.module-content {
+    display: grid;
+}
+
+.module.is-collapsed .module-header {
+    border-bottom-color: transparent;
+}
+
+.module.is-collapsed .module-content {
+    display: none;
+}
+
+.module-item {
+    margin-top: 0;
+    border: 1px solid rgba(221, 230, 238, 0.85);
+    border-radius: var(--radius-md);
+    background: linear-gradient(180deg, #fff, #fbfdff);
+    transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+}
+
+.module-item:hover {
+    transform: translateY(-1px);
+    border-color: #c9d8e5;
+    box-shadow: 0 8px 20px rgba(15, 23, 42, 0.06);
+}
+
+.module-left {
+    align-items: flex-start;
+}
+
+.module-img {
+    border: 1px solid var(--line);
+    padding: 6px;
+    background: #fff;
+}
+
+.module-right {
+    justify-content: flex-start;
+}
+
+.module-right h3 {
+    line-height: 1.35;
+}
+
+.module-right h4 {
+    color: #374151;
+    font-weight: 600;
+}
+
+.module-right ul {
+    margin-top: 10px;
+    padding-left: 18px;
+}
+
+.module-right li + li {
+    margin-top: 7px;
+}
+
+.about-left {
+    flex-wrap: wrap;
+}
+
+.about-item {
+    background: #f8fafc;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+}
+
+.about-right p {
+    font-size: 15.5px;
+}
+
+.skills-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.skill-item {
+    flex: none;
+    max-width: none;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: #f8fafc;
+    box-shadow: none;
+}
+
+.contact-item {
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    background: #f8fafc;
+}
+
+@media (max-width: 768px) {
+    body {
+        padding: 16px 12px 32px;
+    }
+
+    .profile-info {
+        margin: -56px 20px 0;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    .profile-actions {
+        margin-left: 20px;
+        margin-right: 20px;
+    }
+
+    .module-header,
+    .module-content {
+        padding-left: 18px;
+        padding-right: 18px;
+    }
+
+    .skills-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 520px) {
+    .banner {
+        height: 155px;
+    }
+
+    .profile-pic {
+        width: 112px;
+        height: 112px;
+    }
+
+    .module-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .module-toggle {
+        align-self: flex-start;
+    }
+
+    .module-item {
+        flex-direction: column;
+    }
+
+    .module-left {
+        flex: none;
+    }
+
+    .skills-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --page-bg: #0f1720;
+        --card-bg: #18212b;
+        --text-main: #eef4f8;
+        --text-muted: #b7c4d0;
+        --text-soft: #98a8b5;
+        --brand: #73b7ff;
+        --brand-soft: rgba(115, 183, 255, 0.13);
+        --line: rgba(255, 255, 255, 0.10);
+        --shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
+        --shadow-soft: 0 4px 18px rgba(0, 0, 0, 0.22);
+    }
+
+    header,
+    .module,
+    .module-item {
+        background: var(--card-bg);
+        border-color: var(--line);
+    }
+
+    .module-item,
+    .about-item,
+    .contact-item,
+    .skill-item {
+        background: rgba(255, 255, 255, 0.035);
+    }
+
+    .module-img {
+        background: rgba(255, 255, 255, 0.92);
+    }
+
+    .pronoun {
+        background: rgba(255, 255, 255, 0.08);
+        color: var(--text-muted) !important;
+    }
+}
+
+/* ===== V2 refinements: tighter LinkedIn layout + per-card details toggle ===== */
+body {
+    padding-top: 18px;
+}
+
+.banner {
+    height: 190px;
+}
+
+.profile-info {
+    margin: -58px 26px 0;
+    align-items: flex-start;
+    gap: 18px;
+}
+
+.profile-pic {
+    width: 124px;
+    height: 124px;
+}
+
+.info-text {
+    padding-top: 22px; /* keeps name from touching the banner edge */
+}
+
+.info-text h1 {
+    margin-bottom: 0;
+}
+
+main {
+    gap: 14px;
+}
+
+.module-title-group h2 {
+    font-size: 19px;
+}
+
+.module-left {
+    flex-basis: 60px;
+}
+
+.module-img {
+    width: 56px;
+    height: 56px;
+    border-radius: 12px;
+}
+
+.module-right h3 {
+    font-size: 16px;
+    margin-bottom: 2px;
+}
+
+.module-right h4,
+.module-right h5,
+.module-right h6 {
+    margin-bottom: 1px;
+}
+
+.item-toggle {
+    align-self: flex-start;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: var(--brand-soft);
+    color: var(--brand);
+    font: inherit;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color .18s ease, transform .18s ease;
+}
+
+.item-toggle:hover {
+    background: #d7ebff;
+    transform: translateY(-1px);
+}
+
+.item-toggle i {
+    font-size: 11px;
+    transition: transform .2s ease;
+}
+
+.item-toggle[aria-expanded="false"] i {
+    transform: rotate(180deg);
+}
+
+.item-details {
+    display: grid;
+}
+
+.module-right .item-details ul {
+    margin-top: 4px;
+}
+
+.module-right .item-details li + li {
+    margin-top: 5px;
+}
+
+.module-item.details-collapsed .item-details {
+    display: none;
+}
+
+.skill-item {
+    padding: 8px 12px;
+}
+
+@media (max-width: 768px) {
+    .banner {
+        height: 170px;
+    }
+
+    .profile-info {
+        margin: -52px 20px 0;
+    }
+
+    .info-text {
+        padding-top: 8px;
+    }
+}
+
+@media (max-width: 520px) {
+    .banner {
+        height: 145px;
+    }
+
+    .profile-pic {
+        width: 104px;
+        height: 104px;
+    }
+
+    .profile-info {
+        gap: 10px;
+    }
+}
+
+@media (prefers-color-scheme: dark) {
+    .item-toggle:hover {
+        background: rgba(115, 183, 255, 0.20);
+    }
+}
+
+
+/* ===== V3 bug fix: keep profile text below banner + slightly tighter cards ===== */
+@media (min-width: 769px) {
+    .profile-info {
+        margin: -58px 26px 0;
+        align-items: flex-start;
+    }
+
+    .info-text {
+        /* Banner is 190px high; profile row starts at 132px. 70px places name clearly below the banner line. */
+        padding-top: 70px;
+    }
+}
+
+.profile-actions {
+    margin-top: 10px;
+}
+
+.module-header {
+    padding: 14px 24px;
+}
+
+.module-content {
+    padding: 16px 24px 20px;
+    gap: 12px;
+}
+
+.module-item {
+    padding: 14px 16px;
+    gap: 14px;
+}
+
+.item-details {
+    margin-top: 2px;
+    gap: 6px;
+}
+
+.item-toggle {
+    padding: 4px 9px;
+}
+
+@media (max-width: 768px) {
+    .profile-info {
+        margin: -48px 20px 0;
+        align-items: flex-start;
+    }
+
+    .info-text {
+        padding-top: 54px;
+    }
+}
+
+@media (max-width: 520px) {
+    .profile-info {
+        margin: -44px 18px 0;
+    }
+
+    .info-text {
+        padding-top: 0;
+    }
+}
+
+
+/* ===== V5 mobile header fix: compact stacked profile, no large blank space ===== */
+@media (max-width: 768px) {
+    header {
+        padding-bottom: 18px;
+    }
+
+    .banner {
+        height: 165px;
+    }
+
+    .profile-info {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 12px !important;
+        margin: -58px 22px 0 !important;
+    }
+
+    .profile-pic {
+        width: 112px;
+        height: 112px;
+        flex: 0 0 auto;
+    }
+
+    .info-text {
+        padding-top: 0 !important;
+        padding-bottom: 0 !important;
+        margin-top: 0 !important;
+    }
+
+    .info-text h1 {
+        font-size: clamp(28px, 8vw, 36px);
+        line-height: 1.08;
+        margin-bottom: 6px;
+    }
+
+    .info-text p {
+        font-size: 17px;
+        line-height: 1.3;
+    }
+
+    .profile-actions {
+        margin: 18px 22px 0 !important;
+        gap: 10px;
+    }
+}
+
+@media (max-width: 520px) {
+    body {
+        padding: 14px 10px 32px;
+    }
+
+    .banner {
+        height: 145px;
+    }
+
+    .profile-info {
+        margin: -52px 18px 0 !important;
+        gap: 10px !important;
+    }
+
+    .profile-pic {
+        width: 104px;
+        height: 104px;
+    }
+
+    .info-text h1 {
+        font-size: clamp(27px, 8.5vw, 34px);
+        white-space: normal;
+    }
+
+    .info-text p {
+        font-size: 16px;
+    }
+
+    .profile-actions {
+        margin: 16px 18px 0 !important;
+    }
+
+    .profile-actions a.button {
+        min-height: 38px;
+        padding: 8px 13px;
+    }
+}
+
+
+/* ===== V6 requested refinements (kept) ===== */
+@media (min-width: 769px) {
+    .profile-actions {
+        margin-left: 168px !important;
+        margin-right: 26px !important;
+        justify-content: flex-start;
+    }
+}
+
+/* About and Contact are fixed summary cards, not collapsible sections. */
+.about-section,
+.contact-section {
+    padding: 18px 24px 20px;
+}
+
+.about-section > h2,
+.contact-section > h2 {
+    margin: 0 0 14px;
+    font-size: 19px;
+    letter-spacing: -0.02em;
+}
+
+.about-section > h2::before,
+.contact-section > h2::before {
+    content: "";
+    display: inline-block;
+    width: 4px;
+    height: 19px;
+    margin-right: 10px;
+    border-radius: 999px;
+    background: var(--brand);
+    vertical-align: -3px;
+}
+
+.about-section .about-content,
+.contact-section .contact-item {
+    margin-top: 0;
+}
+
+.about-content {
+    gap: 10px;
+}
+
+.about-left {
+    gap: 8px;
+}
+
+.about-item {
+    padding: 6px 10px;
+}
+
+.contact-section {
+    gap: 0;
+}
+
+.contact-item {
+    padding: 10px 13px;
+}
+
+/* Volunteering has description visible by default; only Experience cards get detail toggles. */
+.module-item:not(.has-item-toggle) .item-toggle {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .profile-actions {
+        margin-left: 22px !important;
+        margin-right: 22px !important;
+    }
+
+    .about-section,
+    .contact-section {
+        padding: 16px 18px 18px;
+    }
+
+    .about-section > h2,
+    .contact-section > h2 {
+        margin-bottom: 12px;
+    }
+}
+
+@media (max-width: 520px) {
+    .profile-actions {
+        margin-left: 18px !important;
+        margin-right: 18px !important;
+    }
+
+    .about-left {
+        gap: 7px;
+    }
+}
+
+
+/* ===== V7 refinements ===== */
+@media (min-width: 769px) {
+    .profile-actions {
+        /* align buttons with the name/subtitle column instead of under the avatar */
+        margin-left: 168px !important;
+        margin-top: 10px !important;
+    }
+}
+
+/* Static sections keep the same title divider but do not show collapse controls. */
+.module-static {
+    padding: 0 !important;
+}
+
+.module-static .module-header {
+    border-bottom: 1px solid var(--line);
+}
+
+.module-static .static-content {
+    padding-top: 14px;
+    padding-bottom: 16px;
+}
+
+.about-section .about-left {
+    gap: 8px;
+}
+
+.about-section .about-item {
+    padding: 6px 10px;
+}
+
+.contact-section .static-content {
+    padding-top: 14px;
+}
+
+.contact-section .contact-item {
+    padding: 10px 13px;
+}
+
+/* Reduce nested-card feeling: entries become clean list rows instead of cards inside cards. */
+.module-content .module-item {
+    border: 0;
+    border-top: 1px solid var(--line);
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    padding: 14px 0 0;
+}
+
+.module-content .module-item:first-child {
+    border-top: 0;
+    padding-top: 0;
+}
+
+.module-content .module-item:hover {
+    transform: none;
+    box-shadow: none;
+    border-color: var(--line);
+}
+
+.module-content .module-img {
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
+}
+
+/* Experience details still feel interactive, but with a lighter detail area. */
+.has-item-toggle .item-details {
+    padding: 2px 0 0;
+}
+
+.item-toggle {
+    margin-top: 7px;
+}
+
+/* Volunteering and other simple description cards never get detail toggles. */
+.module:not([data-key="experience"]) .item-toggle {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .profile-actions {
+        margin-left: 22px !important;
+        margin-right: 22px !important;
+    }
+
+    .module-static .static-content,
+    .module-content {
+        padding-top: 14px;
+        padding-bottom: 16px;
+    }
+}
+
+@media (max-width: 520px) {
+    .profile-actions {
+        margin-left: 18px !important;
+        margin-right: 18px !important;
+    }
+
+    .module-static .static-content,
+    .module-content {
+        padding-top: 12px;
+        padding-bottom: 15px;
+    }
+}
+
+@media (prefers-color-scheme: dark) {
+    .module-content .module-item {
+        background: transparent;
+    }
+}
+
+/* ===== V8 spacing polish ===== */
+/* Make static and collapsible section headers visually identical. */
+.module-header,
+.module-static .module-header,
+.static-header {
+    min-height: 74px;
+    padding: 18px 24px !important;
+    align-items: center;
+}
+
+/* About and Contact are not collapsible, but keep the divider under the title. */
+.module-static .module-toggle,
+.about-section .module-toggle,
+.contact-section .module-toggle {
+    display: none !important;
+}
+
+.module-static .module-header,
+.about-section .module-header,
+.contact-section .module-header {
+    border-bottom: 1px solid var(--line) !important;
+}
+
+/* Bring About content closer to the divider, while keeping the paragraph comfortably separated from the chips. */
+.about-section .static-content,
+.about-section .module-content {
+    padding-top: 13px !important;
+    padding-bottom: 22px !important;
+}
+
+/* Keep Contact content aligned with other sections without changing its already-good vertical rhythm. */
+.contact-section .static-content,
+.contact-section .module-content {
+    padding-top: 16px !important;
+    padding-bottom: 22px !important;
+}
+
+/* Desktop: align header buttons with the name/subtitle column, not under the avatar. */
+@media (min-width: 769px) {
+    .profile-actions {
+        margin-left: 174px !important;
+        align-self: flex-start !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .module-header,
+    .module-static .module-header,
+    .static-header {
+        min-height: 66px;
+        padding: 16px 18px !important;
+    }
+
+    .about-section .static-content,
+    .about-section .module-content {
+        padding-top: 12px !important;
+    }
+
+    .about-section .about-content {
+        gap: 12px !important;
+    }
+}
+
+
+/* ===== V10 alignment polish =====
+   Unify the profile card gutters with all modules, and normalize section header height. */
+:root {
+    --section-x: 26px;
+    --section-header-y: 18px;
+}
+
+/* Top profile card uses the same horizontal rhythm as modules. */
+header {
+    padding-bottom: 24px !important;
+}
+
+.profile-info {
+    margin-left: var(--section-x) !important;
+    margin-right: var(--section-x) !important;
+}
+
+@media (min-width: 769px) {
+    .profile-actions {
+        /* 26px section gutter + 136px avatar + 20px gap = aligned with name column */
+        margin-left: calc(var(--section-x) + 136px + 20px) !important;
+        margin-right: var(--section-x) !important;
+    }
+}
+
+/* Every module title bar, including About and Contact, has exactly the same height. */
+.module-header,
+.module-static .module-header,
+.about-section .module-header,
+.contact-section .module-header,
+.static-header {
+    min-height: 70px !important;
+    padding: var(--section-header-y) var(--section-x) !important;
+    border-bottom: 1px solid var(--line) !important;
+}
+
+.module-title-group h2 {
+    line-height: 1.25 !important;
+}
+
+/* About content: chips closer to divider, paragraph slightly farther from chips. */
+.about-section .static-content,
+.about-section .module-content {
+    padding: 14px var(--section-x) 22px !important;
+}
+
+.about-section .about-content {
+    gap: 18px !important;
+}
+
+.about-section .about-left {
+    margin-bottom: 0 !important;
+}
+
+/* Contact keeps the same compact body rhythm as other content sections. */
+.contact-section .static-content,
+.contact-section .module-content {
+    padding: 14px var(--section-x) 22px !important;
+}
+
+/* Keep non-collapsible sections visually static. */
+.about-section .module-toggle,
+.contact-section .module-toggle,
+.module-static .module-toggle {
+    display: none !important;
+}
+
+@media (max-width: 768px) {
+    :root {
+        --section-x: 20px;
+        --section-header-y: 16px;
+    }
+
+    .module-header,
+    .module-static .module-header,
+    .about-section .module-header,
+    .contact-section .module-header,
+    .static-header {
+        min-height: 64px !important;
+    }
+
+    .profile-info {
+        margin-left: var(--section-x) !important;
+        margin-right: var(--section-x) !important;
+    }
+
+    .profile-actions {
+        margin-left: var(--section-x) !important;
+        margin-right: var(--section-x) !important;
+    }
+
+    .about-section .static-content,
+    .about-section .module-content,
+    .contact-section .static-content,
+    .contact-section .module-content {
+        padding-left: var(--section-x) !important;
+        padding-right: var(--section-x) !important;
+    }
+}
+
+/* ===== V11 final polish: mobile profile gutters + plain organization logos ===== */
+/* Keep the banner untouched, but make the profile text/buttons use the same gutters as modules. */
+@media (max-width: 768px) {
+    :root {
+        --section-x: 26px;
+    }
+
+    .profile-info,
+    .profile-actions {
+        margin-left: var(--section-x) !important;
+        margin-right: var(--section-x) !important;
+    }
+
+    .module-header,
+    .module-static .module-header,
+    .about-section .module-header,
+    .contact-section .module-header,
+    .static-header,
+    .module-content,
+    .module-static .static-content,
+    .about-section .static-content,
+    .about-section .module-content,
+    .contact-section .static-content,
+    .contact-section .module-content {
+        padding-left: var(--section-x) !important;
+        padding-right: var(--section-x) !important;
+    }
+}
+
+@media (max-width: 520px) {
+    :root {
+        --section-x: 26px;
+    }
+
+    .profile-info,
+    .profile-actions {
+        margin-left: var(--section-x) !important;
+        margin-right: var(--section-x) !important;
+    }
+}
+
+/* Logos inside resume entries should feel like clean brand marks, not mini cards. */
+.module-img,
+.module-content .module-img {
+    border: 0 !important;
+    box-shadow: none !important;
+    background: transparent !important;
+    padding: 0 !important;
+    border-radius: 10px !important;
+}
+
+.module-item:hover .module-img {
+    box-shadow: none !important;
+}
+
+/* ===== V13 final alignment + dark mode fixes =====
+   Reasoning: the desktop text column starts after the section gutter + avatar width + profile gap.
+   Keep banner geometry untouched; only align the action row to the same text column. */
+@media (min-width: 769px) {
+    .profile-actions {
+        margin-left: calc(var(--section-x) + 124px + 18px) !important;
+        margin-right: var(--section-x) !important;
+        margin-top: 14px !important;
+        align-self: flex-start !important;
+        justify-content: flex-start !important;
+    }
+}
+
+@media (prefers-color-scheme: dark) {
+    /* Primary Contact button: strong contrast for both icon and text. */
+    .profile-actions a.button:first-child {
+        background: #8cc8ff !important;
+        border-color: #8cc8ff !important;
+        color: #07111f !important;
+    }
+
+    .profile-actions a.button:first-child:hover {
+        background: #a8d6ff !important;
+        border-color: #a8d6ff !important;
+        color: #07111f !important;
+    }
+
+    .profile-actions a.button:first-child i,
+    .profile-actions a.button:first-child span {
+        color: #07111f !important;
+    }
+
+    /* Secondary language button remains clearly readable on dark cards. */
+    .profile-actions a.button:not(:first-child) {
+        background: rgba(140, 200, 255, 0.08) !important;
+        border-color: #8cc8ff !important;
+        color: #b9ddff !important;
+    }
+
+    .profile-actions a.button:not(:first-child):hover {
+        background: rgba(140, 200, 255, 0.16) !important;
+        color: #d7ecff !important;
+    }
+
+    .profile-actions a.button:not(:first-child) i,
+    .profile-actions a.button:not(:first-child) span {
+        color: inherit !important;
+    }
+
+    /* Keep the white portrait ring, but make its depth visible in dark mode. */
+    .profile-pic {
+        box-shadow:
+            0 0 0 1px rgba(140, 200, 255, 0.45),
+            0 14px 36px rgba(0, 0, 0, 0.72),
+            0 0 28px rgba(140, 200, 255, 0.18) !important;
+    }
+}
+
+/* ===== V14 polish: calmer dark portrait ring + detail text alignment ===== */
+/* Detail bullets sit outside the text column, so the bullet text aligns with titles/buttons. */
+.module-right .item-details ul {
+    list-style: none !important;
+    padding-left: 0 !important;
+    margin-left: 0 !important;
+}
+
+.module-right .item-details li {
+    position: relative;
+    padding-left: 0 !important;
+    margin-left: 0 !important;
+}
+
+.module-right .item-details li::before {
+    content: "•";
+    position: absolute;
+    left: -18px;
+    top: 0;
+    color: currentColor;
+    font-weight: 700;
+}
+
+@media (max-width: 520px) {
+    .module-right .item-details li::before {
+        left: -14px;
+    }
+}
+
+@media (prefers-color-scheme: dark) {
+    /* Match light mode behavior: visible depth without the blue halo/highlight edge. */
+    .profile-pic {
+        border-color: var(--card-bg) !important;
+        box-shadow:
+            0 10px 28px rgba(0, 0, 0, 0.46),
+            0 2px 8px rgba(0, 0, 0, 0.36) !important;
+    }
+}
+
+
+/* V15: remove section/card border highlight on hover. */
+.module:hover {
+    box-shadow: var(--shadow);
+    border-color: var(--line);
+}
+
+
+/* V16: dark-mode expand/collapse hover should stay subtle and readable. */
+@media (prefers-color-scheme: dark) {
+    .module-toggle:hover,
+    .item-toggle:hover {
+        background: rgba(102, 179, 255, 0.14) !important;
+        color: #8fc8ff !important;
+        border-color: rgba(102, 179, 255, 0.20) !important;
+        box-shadow: none !important;
+    }
+
+    .module-toggle:hover span,
+    .item-toggle:hover span,
+    .module-toggle:hover i,
+    .item-toggle:hover i {
+        color: #8fc8ff !important;
+    }
+}
+
+
+/* V17: remove all section/card hover animation, and make desktop layout slightly narrower. */
+body {
+    max-width: 960px;
+}
+
+.module,
+.module-content .module-item,
+.module-item {
+    transition: none !important;
+}
+
+.module:hover,
+.module-content .module-item:hover,
+.module-item:hover {
+    transform: none !important;
+    box-shadow: var(--shadow-soft) !important;
+    border-color: var(--line) !important;
+}
+
+.module-content .module-item:hover,
+.module-item:hover {
+    box-shadow: none !important;
+}
+
+@media (max-width: 768px) {
+    body {
+        max-width: 100%;
+    }
+}
+
+/* ===== V18: LinkedIn-style lighter/narrower polish =====
+   Scope: only adjusts width, font size, and weight to reduce the bulky feel. */
+body {
+    max-width: 780px !important;
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+    font-size: 14px;
+    line-height: 1.45;
+}
+
+:root {
+    --radius-lg: 12px;
+    --radius-md: 10px;
+    --shadow-soft: 0 2px 8px rgba(15, 23, 42, 0.06);
+    --shadow: 0 4px 14px rgba(15, 23, 42, 0.08);
+}
+
+.banner {
+    height: 168px !important;
+}
+
+.profile-info {
+    gap: 16px !important;
+}
+
+.profile-pic {
+    width: 112px !important;
+    height: 112px !important;
+    border-width: 4px !important;
+}
+
+.info-text h1 {
+    font-size: clamp(23px, 3vw, 28px) !important;
+    font-weight: 600 !important;
+    letter-spacing: -0.025em !important;
+    line-height: 1.15 !important;
+}
+
+.info-text p {
+    font-size: 14.5px !important;
+    font-weight: 400 !important;
+}
+
+.pronoun {
+    font-size: 12px !important;
+    font-weight: 500 !important;
+    padding: 3px 7px !important;
+}
+
+.profile-actions a.button,
+.module-toggle,
+.item-toggle {
+    font-weight: 600 !important;
+    letter-spacing: 0 !important;
+}
+
+.profile-actions a.button {
+    min-height: 36px !important;
+    padding: 7px 14px !important;
+    font-size: 13.5px !important;
+}
+
+.module-header,
+.module-static .module-header,
+.about-section .module-header,
+.contact-section .module-header,
+.static-header {
+    min-height: 58px !important;
+}
+
+.module-title-group h2,
+.about-section > h2,
+.contact-section > h2 {
+    font-size: 17px !important;
+    font-weight: 600 !important;
+    letter-spacing: -0.01em !important;
+}
+
+.module-title-group h2::before,
+.about-section > h2::before,
+.contact-section > h2::before {
+    height: 16px !important;
+    width: 3px !important;
+    margin-right: 8px !important;
+}
+
+.module-content,
+.module-static .static-content,
+.about-section .static-content,
+.about-section .module-content,
+.contact-section .static-content,
+.contact-section .module-content {
+    padding-top: 12px !important;
+    padding-bottom: 18px !important;
+}
+
+.module-content .module-item {
+    padding-top: 12px !important;
+}
+
+.module-left {
+    flex-basis: 52px !important;
+}
+
+.module-img {
+    width: 48px !important;
+    height: 48px !important;
+}
+
+.module-right h3 {
+    font-size: 15px !important;
+    font-weight: 600 !important;
+    line-height: 1.3 !important;
+}
+
+.module-right h4 {
+    font-size: 13.5px !important;
+    font-weight: 500 !important;
+}
+
+.module-right h5,
+.module-right h6,
+.module-right p,
+.module li,
+.about-item,
+.contact-item {
+    font-size: 13px !important;
+    font-weight: 400 !important;
+}
+
+.about-right p {
+    font-size: 13.5px !important;
+}
+
+.about-item {
+    padding: 5px 9px !important;
+}
+
+.skills-grid {
+    gap: 8px !important;
+}
+
+.skill-item {
+    font-size: 13px !important;
+    font-weight: 500 !important;
+    padding: 7px 10px !important;
+}
+
+.skill-item p {
+    font-size: 11.5px !important;
+    font-weight: 400 !important;
+}
+
+@media (min-width: 769px) {
+    .profile-actions {
+        margin-left: calc(var(--section-x) + 112px + 16px) !important;
+    }
+}
+
+@media (max-width: 768px) {
+    body {
+        max-width: 100% !important;
+        padding-left: 12px !important;
+        padding-right: 12px !important;
+    }
+
+    .banner {
+        height: 150px !important;
+    }
+
+    .profile-pic {
+        width: 100px !important;
+        height: 100px !important;
+    }
+
+    .info-text h1 {
+        font-size: clamp(24px, 7vw, 30px) !important;
+    }
+
+    .info-text p {
+        font-size: 14px !important;
+    }
+}
+
+@media (max-width: 520px) {
+    :root {
+        --section-x: 20px;
+    }
+
+    body {
+        padding-left: 10px !important;
+        padding-right: 10px !important;
+    }
+
+    .banner {
+        height: 136px !important;
+    }
+
+    .profile-info,
+    .profile-actions {
+        margin-left: var(--section-x) !important;
+        margin-right: var(--section-x) !important;
     }
 }
