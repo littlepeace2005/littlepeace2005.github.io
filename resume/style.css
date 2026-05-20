@@ -1956,11 +1956,9 @@ body {
     }
 }
 
-/* ===== V20 mobile parity fix: keep section headers and rows horizontal =====
-   Requested: mobile section titles and resume rows should keep the desktop layout.
-   Only layout is changed here; expand/collapse button visual styling is untouched. */
+/* ===== V20 mobile parity fix: keep section headers and entry rows like desktop ===== */
 @media (max-width: 768px) {
-    /* Keep title + expand/collapse control on one horizontal row. */
+    /* Keep module title and expand/collapse control on one horizontal row. */
     .module-header,
     .module-static .module-header,
     .about-section .module-header,
@@ -1984,6 +1982,7 @@ body {
     .module-title-group h2,
     .about-section > h2,
     .contact-section > h2 {
+        display: block !important;
         text-align: left !important;
         margin: 0 !important;
         white-space: nowrap !important;
@@ -1995,11 +1994,13 @@ body {
         flex: 0 0 auto !important;
         align-self: center !important;
         white-space: nowrap !important;
+        margin: 0 !important;
     }
 
-    /* Keep each entry as logo-left / content-right on phones. */
+    /* Keep resume entries as logo-left / content-right rows on mobile. */
     .module-item,
-    .module-content .module-item {
+    .module-content .module-item,
+    .module[data-key="experience"] .module-content .module-item.has-item-toggle {
         display: flex !important;
         flex-direction: row !important;
         align-items: flex-start !important;
@@ -2007,39 +2008,69 @@ body {
     }
 
     .module-left,
-    .module-content .module-left {
-        flex: 0 0 48px !important;
-        width: 48px !important;
+    .module[data-key="experience"] .module-content .module-item.has-item-toggle .module-left {
+        flex: 0 0 46px !important;
+        width: 46px !important;
         justify-content: flex-start !important;
-        align-items: flex-start !important;
+        grid-column: auto !important;
+        grid-row: auto !important;
     }
 
     .module-img,
     .module-content .module-img {
-        width: 46px !important;
-        height: 46px !important;
+        width: 44px !important;
+        height: 44px !important;
     }
 
     .module-right,
-    .module-content .module-right {
+    .module[data-key="experience"] .module-content .module-item.has-item-toggle .module-right {
         flex: 1 1 auto !important;
         min-width: 0 !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: flex-start !important;
+    }
+
+    /* Undo the older mobile grid override so the detail toggle remains inside the right column. */
+    .module[data-key="experience"] .module-content .module-item.has-item-toggle .module-right > h3,
+    .module[data-key="experience"] .module-content .module-item.has-item-toggle .module-right > h4,
+    .module[data-key="experience"] .module-content .module-item.has-item-toggle .module-right > h5,
+    .module[data-key="experience"] .module-content .module-item.has-item-toggle .module-right > h6,
+    .module[data-key="experience"] .module-content .module-item.has-item-toggle .item-toggle,
+    .module[data-key="experience"] .module-content .module-item.has-item-toggle .item-details {
+        grid-column: auto !important;
+        width: auto !important;
+    }
+
+    .module[data-key="experience"] .module-content .module-item.has-item-toggle .item-toggle {
+        align-self: flex-start !important;
+        justify-self: auto !important;
+        margin-top: 7px !important;
+    }
+
+    .module[data-key="experience"] .module-content .module-item.has-item-toggle .item-details {
+        margin-top: 6px !important;
     }
 }
 
 @media (max-width: 520px) {
-    /* Override the earlier phone-only stacking rule without changing button appearance. */
     .module-header,
     .module-static .module-header,
     .about-section .module-header,
     .contact-section .module-header,
     .static-header {
-        flex-direction: row !important;
-        align-items: center !important;
+        gap: 8px !important;
     }
 
-    .module-item,
-    .module-content .module-item {
-        flex-direction: row !important;
+    .module-left,
+    .module[data-key="experience"] .module-content .module-item.has-item-toggle .module-left {
+        flex-basis: 42px !important;
+        width: 42px !important;
+    }
+
+    .module-img,
+    .module-content .module-img {
+        width: 40px !important;
+        height: 40px !important;
     }
 }
