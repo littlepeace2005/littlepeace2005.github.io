@@ -378,7 +378,7 @@ main {
     }
 
     strong, b {
-        color: #c0c0c0;
+        color: #c0c0c0; /* 让加粗文字真正“亮起来” */
     }
 
     /* ====== skill-item ====== */
@@ -392,7 +392,7 @@ main {
         color: #bbbbbb !important;
     }
 
-    /* ====== interactive ====== */
+    /* ====== 交互元素 ====== */
     .profile-actions a.button {
         background-color: #2b2b2b;
         color: #66b3ff;
@@ -1859,5 +1859,99 @@ body {
     .profile-actions {
         margin-left: var(--section-x) !important;
         margin-right: var(--section-x) !important;
+    }
+}
+
+/* ===== V19 mobile layout fix: keep LinkedIn-like desktop rhythm on phones ===== */
+@media (max-width: 520px) {
+    /* Section title row stays horizontal: title left, toggle right. */
+    .module-header,
+    .module-static .module-header,
+    .about-section .module-header,
+    .contact-section .module-header,
+    .static-header {
+        flex-direction: row !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        gap: 10px !important;
+        text-align: left !important;
+    }
+
+    .module-title-group {
+        flex: 1 1 auto !important;
+        min-width: 0 !important;
+        text-align: left !important;
+    }
+
+    .module-title-group h2,
+    .about-section > h2,
+    .contact-section > h2 {
+        text-align: left !important;
+        margin-bottom: 0 !important;
+    }
+
+    .module-toggle {
+        flex: 0 0 auto !important;
+        align-self: center !important;
+        white-space: nowrap !important;
+    }
+
+    /* Resume rows stay image-left / content-right instead of stacking. */
+    .module-item,
+    .module-content .module-item {
+        flex-direction: row !important;
+        align-items: flex-start !important;
+        gap: 12px !important;
+    }
+
+    .module-left {
+        flex: 0 0 48px !important;
+        justify-content: flex-start !important;
+    }
+
+    .module-img {
+        width: 46px !important;
+        height: 46px !important;
+    }
+
+    .module-right {
+        min-width: 0 !important;
+    }
+
+    /* Experience only: top row is logo + basic info; details button and bullets sit below both columns. */
+    .module[data-key="experience"] .module-content .module-item.has-item-toggle {
+        display: grid !important;
+        grid-template-columns: 48px minmax(0, 1fr) !important;
+        column-gap: 12px !important;
+        row-gap: 0 !important;
+    }
+
+    .module[data-key="experience"] .module-content .module-item.has-item-toggle .module-left {
+        grid-column: 1 !important;
+        grid-row: 1 / span 5 !important;
+    }
+
+    .module[data-key="experience"] .module-content .module-item.has-item-toggle .module-right {
+        display: contents !important;
+    }
+
+    .module[data-key="experience"] .module-content .module-item.has-item-toggle .module-right > h3,
+    .module[data-key="experience"] .module-content .module-item.has-item-toggle .module-right > h4,
+    .module[data-key="experience"] .module-content .module-item.has-item-toggle .module-right > h5,
+    .module[data-key="experience"] .module-content .module-item.has-item-toggle .module-right > h6 {
+        grid-column: 2 !important;
+        min-width: 0 !important;
+    }
+
+    .module[data-key="experience"] .module-content .module-item.has-item-toggle .item-toggle {
+        grid-column: 1 / -1 !important;
+        margin-top: 9px !important;
+        justify-self: flex-start !important;
+    }
+
+    .module[data-key="experience"] .module-content .module-item.has-item-toggle .item-details {
+        grid-column: 1 / -1 !important;
+        margin-top: 6px !important;
+        width: 100% !important;
     }
 }
