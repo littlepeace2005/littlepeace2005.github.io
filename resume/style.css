@@ -663,11 +663,6 @@ header {
     flex-wrap: wrap;
 }
 
-.about-item {
-    background: #f8fafc;
-    border: 1px solid var(--line);
-    border-radius: 999px;
-}
 
 .about-right p {
     font-size: 15.5px;
@@ -687,11 +682,6 @@ header {
     box-shadow: none;
 }
 
-.contact-item {
-    border: 1px solid var(--line);
-    border-radius: var(--radius-md);
-    background: #f8fafc;
-}
 
 @media (max-width: 768px) {
     body {
@@ -775,8 +765,6 @@ header {
     }
 
     .module-item,
-    .about-item,
-    .contact-item,
     .skill-item {
         background: rgba(255, 255, 255, 0.035);
     }
@@ -1128,17 +1116,11 @@ main {
     gap: 8px;
 }
 
-.about-item {
-    padding: 6px 10px;
-}
 
 .contact-section {
     gap: 0;
 }
 
-.contact-item {
-    padding: 10px 13px;
-}
 
 /* Volunteering has description visible by default; only Experience cards get detail toggles. */
 .module-item:not(.has-item-toggle) .item-toggle {
@@ -1201,17 +1183,11 @@ main {
     gap: 8px;
 }
 
-.about-section .about-item {
-    padding: 6px 10px;
-}
 
 .contact-section .static-content {
     padding-top: 14px;
 }
 
-.contact-section .contact-item {
-    padding: 10px 13px;
-}
 
 /* Reduce nested-card feeling: entries become clean list rows instead of cards inside cards. */
 .module-content .module-item {
@@ -1791,9 +1767,6 @@ body {
     font-size: 13.5px !important;
 }
 
-.about-item {
-    padding: 5px 9px !important;
-}
 
 .skills-grid {
     gap: 8px !important;
