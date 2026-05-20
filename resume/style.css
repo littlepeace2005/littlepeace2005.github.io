@@ -2074,3 +2074,26 @@ body {
         height: 40px !important;
     }
 }
+
+/* ===== V21 mobile bilingual title fix =====
+   The previous mobile rule forced every h2[data-lang] to display:block !important,
+   which overrode JS language hiding and made English/Chinese titles appear together.
+   Keep the same horizontal mobile layout, but respect the active language. */
+@media (max-width: 768px) {
+    .module-title-group h2[style*="display: none"],
+    .info-text [data-lang][style*="display: none"],
+    .profile-actions [data-lang][style*="display: none"],
+    .module-content [data-lang][style*="display: none"],
+    .static-content [data-lang][style*="display: none"] {
+        display: none !important;
+    }
+
+    .module-title-group h2[data-lang]:not([style*="display: none"]) {
+        display: block !important;
+        text-align: left !important;
+        margin: 0 !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+    }
+}
