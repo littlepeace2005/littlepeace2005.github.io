@@ -2070,3 +2070,42 @@ body {
         text-overflow: ellipsis !important;
     }
 }
+
+
+/* ===== Link icon style: no underline, subtle icon suffixes ===== */
+.module a,
+.contact-item a {
+    text-decoration: none !important;
+}
+
+/* Regular text links get a small external-link icon after the text. */
+.module a[href]:not([href^="mailto:"]):not(.button)::after {
+    content: "\f0c1";
+    display: inline-block;
+    margin-left: 0.28em;
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+    font-size: 0.64em;
+    line-height: 1;
+    opacity: 0.62;
+    vertical-align: 0.12em;
+}
+
+/* Email links get a small pen icon instead. */
+.module a[href^="mailto:"]::after,
+.contact-item a[href^="mailto:"]::after {
+    content: "\f304";
+    display: inline-block;
+    margin-left: 0.28em;
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+    font-size: 0.64em;
+    line-height: 1;
+    opacity: 0.62;
+    vertical-align: 0.12em;
+}
+
+.module a:hover::after,
+.contact-item a:hover::after {
+    opacity: 0.9;
+}
