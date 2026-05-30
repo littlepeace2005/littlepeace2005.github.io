@@ -1552,7 +1552,7 @@ header {
 }
 
 .module-right .item-details li::before {
-    content: "â€¢";
+    content: "\2022";
     position: absolute;
     left: -18px;
     top: 0;
@@ -2112,27 +2112,28 @@ body {
 
 
 /* Tags */
-.tag{
-    display:inline-flex;
-    align-items:center;
-    justify-content:center;
-    margin-left:4px;
-    padding:1px 6px;
-    min-height:1.42em;
-    line-height:1;
-    border-radius:8px;
-    font-size:0.70em;
-    font-weight:600;
-    border:1.5px solid #8fd3d8;
-    color:#0b9aa5;
-    background:#eefafb;
-    vertical-align:0.10em;
-    white-space:nowrap;
+.tag {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 2px;
+    padding: 1px 5px;
+    min-height: 1.35em;
+    line-height: 1;
+    border-radius: 7px;
+    font-size: 0.72em;
+    font-weight: 600;
+    border: 1.5px solid #8fd3d8;
+    color: #0b9aa5;
+    background: #eefafb;
+    vertical-align: middle;
+    white-space: nowrap;
 }
 
-.internship-tag,
-.cause-tag{
-    border-color:#8fd3d8;
-    color:#0b9aa5;
-    background:#eefafb;
+@media (prefers-color-scheme: dark) {
+    .tag {
+        border-color: rgba(143, 211, 216, 0.48) !important;
+        color: #9ee9ee !important;
+        background: rgba(143, 211, 216, 0.12) !important;
+    }
 }
