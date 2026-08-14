@@ -1,14 +1,11 @@
-const LANG_KEY = 'lang';
 const DEFAULT_SECTION_EXPANDED = true;
 const DEFAULT_DETAILS_EXPANDED = false;
-let currentLang = localStorage.getItem(LANG_KEY) || 'en';
 
 const $all = (selector, root = document) => [...root.querySelectorAll(selector)];
-const textByLang = (en, zh) => (currentLang === 'en' ? en : zh);
 const storageKey = (type, el) => `resume:${type}:${el.dataset.key || ''}`;
 
 function sectionTitle(section) {
-    return section.querySelector(':scope > h2[data-lang="en"], .module-title-group h2[data-lang="en"]')?.textContent.trim() || '';
+    return section.querySelector(':scope > h2, .module-title-group h2')?.textContent.trim() || '';
 }
 
 function moduleKey(section, index) {
@@ -29,28 +26,20 @@ function updateToggleLabels() {
     $all('.module-toggle').forEach(button => {
         const expanded = button.getAttribute('aria-expanded') === 'true';
         button.querySelector('.toggle-label').textContent = expanded
-            ? textByLang('Collapse', '收起')
-            : textByLang('Expand', '展开');
+            ? 'Collapse'
+            : 'Expand';
         setModuleExpanded(button, expanded);
     });
 
     $all('.item-toggle').forEach(button => {
         const expanded = button.getAttribute('aria-expanded') === 'true';
         button.querySelector('.item-toggle-label').textContent = expanded
-            ? textByLang('Hide details', '收起详情')
-            : textByLang('Show details', '展开详情');
+            ? 'Hide details'
+            : 'Show details';
         setItemExpanded(button, expanded);
     });
 }
 
-function setLang(lang) {
-    currentLang = lang;
-    localStorage.setItem(LANG_KEY, lang);
-    $all('[data-lang]').forEach(el => {
-        el.style.display = el.dataset.lang === lang ? '' : 'none';
-    });
-    updateToggleLabels();
-}
 
 function wrapSection(section, { staticSection = false } = {}) {
     if (section.dataset.ready === 'true') return;
@@ -160,10 +149,4 @@ document.addEventListener('DOMContentLoaded', () => {
     initSections();
     initExperienceDetails();
 
-    document.getElementById('lang-toggle')?.addEventListener('click', event => {
-        event.preventDefault();
-        setLang(currentLang === 'en' ? 'zh' : 'en');
-    });
-
-    setLang(currentLang);
 });
