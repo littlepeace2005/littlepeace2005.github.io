@@ -148,5 +148,5 @@ document.addEventListener('DOMContentLoaded', () => {
     initImageProtection();
     initSections();
     initExperienceDetails();
-
+    updateToggleLabels();
 });
